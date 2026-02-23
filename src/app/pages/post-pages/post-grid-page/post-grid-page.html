@@ -1,0 +1,18 @@
+<header>
+  <app-navbar></app-navbar>
+</header>
+
+<app-clock></app-clock>
+
+<main class="post-grid-page-container">
+  <app-toolbar [(viewMode)]="currentView"></app-toolbar>
+
+  @if (currentView() === 'table') {
+    <app-post-table></app-post-table>
+  } @else {
+   <app-post-grid></app-post-grid> 
+  }
+  
+</main>
+
+<app-footer></app-footer>

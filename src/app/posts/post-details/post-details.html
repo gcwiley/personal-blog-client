@@ -1,0 +1,33 @@
+@if (post$ | async; as post) {
+<mat-card class="post-details-card" appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>Post Details</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <mat-list role="list" aria-label="Post Details">
+      <!-- date -->
+      <mat-list-item lines="2" role="listitem">
+        <mat-icon matListItemIcon>calendar_month</mat-icon>
+        <span matListItemTitle>Date</span>
+        <span matListItemLine>{{ post.date | date:'mediumDate' }}</span>
+      </mat-list-item>
+      <!-- author -->
+      <mat-list-item lines="2" role="listitem">
+        <mat-icon matListItemIcon>person</mat-icon>
+        <span matListItemTitle>Author</span>
+        <span matListItemLine>{{ post.author }}</span>
+      </mat-list-item>
+      <!-- category -->
+      <mat-list-item lines="2" role="listitem">
+        <mat-icon matListItemIcon>category</mat-icon>
+        <span matListItemTitle>Category</span>
+        <span matListItemLine>{{ post.category }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card-content>
+</mat-card>
+} @else {
+<div class="loading-container">
+  <mat-spinner diameter="40" aria-label="Loading post details"></mat-spinner>
+</div>
+}

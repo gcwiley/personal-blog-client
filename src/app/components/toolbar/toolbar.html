@@ -1,0 +1,35 @@
+<div class="post-toolbar-container">
+  <button mat-flat-button routerLink="/posts/create">
+    <mat-icon>add</mat-icon>
+    Create Post
+  </button>
+
+  <span class="flex-spacer"></span>
+
+  <!-- New Sort Dropdown -->
+  <mat-form-field
+    appearance="outline"
+    subscriptSizing="dynamic"
+    class="sort-field">
+    <mat-label>Sort by</mat-label>
+    <mat-select [(value)]="sortMode">
+      <mat-option value="newest">Newest First</mat-option>
+      <mat-option value="oldest">Oldest First</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-button-toggle-group [(value)]="viewMode" aria-label="Select view mode">
+    <mat-button-toggle
+      value="grid"
+      aria-label="Grid View"
+      matTooltip="Grid View">
+      <mat-icon>grid_view</mat-icon>
+    </mat-button-toggle>
+    <mat-button-toggle
+      value="table"
+      aria-label="Table View"
+      matTooltip="Table View">
+      <mat-icon>table_rows</mat-icon>
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>

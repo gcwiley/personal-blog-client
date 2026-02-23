@@ -1,0 +1,23 @@
+@use '../../../styles/helpers/constants';
+
+.post-details-card {
+  margin-top: 3rem;
+  margin-bottom: 2rem;
+  border-radius: constants.$border-radius;
+
+  mat-card-header {
+    margin-bottom: 1rem;
+  }
+
+  mat-list {
+    padding-top: 0;
+  }
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 3rem;
+  margin-top: 3rem;
+}

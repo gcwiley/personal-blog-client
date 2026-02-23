@@ -1,0 +1,22 @@
+@if (!dismissed()) {
+<div
+  class="announcement-bar"
+  role="status"
+  aria-live="polite"
+  aria-label="Announcement">
+  <mat-icon class="announcement-icon" aria-hidden="true">info</mat-icon>
+  <p class="announcement-text">
+    <strong>Pre-Release:</strong>
+    This web application is still under development and may contain bugs or
+    inconsistencies.
+  </p>
+  <button
+    mat-icon-button
+    class="dismiss-btn"
+    (click)="dismiss()"
+    aria-label="Dismiss announcement"
+    type="button">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+}

@@ -1,0 +1,39 @@
+{
+  "name": "my-blog-client",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "lint": "ng lint"
+  },
+  "private": true,
+  "packageManager": "npm@11.7.0",
+  "dependencies": {
+    "@angular/cdk": "^21.1.5",
+    "@angular/common": "^21.1.5",
+    "@angular/compiler": "^21.1.5",
+    "@angular/core": "^21.1.5",
+    "@angular/fire": "^20.0.1",
+    "@angular/forms": "^21.1.5",
+    "@angular/material": "^21.1.5",
+    "@angular/platform-browser": "^21.1.5",
+    "@angular/router": "^21.1.5",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "@angular/build": "^21.1.4",
+    "@angular/cli": "^21.1.4",
+    "@angular/compiler-cli": "^21.1.5",
+    "@eslint/js": "^9.39.2",
+    "angular-eslint": "21.2.0",
+    "eslint": "^9.39.1",
+    "jsdom": "^27.1.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "8.47.0",
+    "vitest": "^4.0.8"
+  }
+}

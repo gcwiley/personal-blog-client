@@ -1,0 +1,76 @@
+.post-grid-container {
+  display: grid;
+  // changed to 1fr to make each card take up the full width
+  grid-template-columns: 1fr;
+  gap: 24px;
+  padding: 16px 0;
+  max-width: 100%; 
+  margin: 0 auto;   /* Optional: centers the feed on the page */
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  }
+
+  mat-card-header {
+    margin-bottom: 12px;
+  }
+
+  mat-card-title {
+    font-size: 1.25rem;
+    line-height: 1.4;
+    margin-bottom: 4px;
+  }
+
+  mat-card-content {
+    flex-grow: 1; /* Pushes the actions to the bottom */
+  }
+}
+
+.post-excerpt {
+  color: var(--mat-sys-on-surface-variant);
+  line-height: 1.6;
+  margin: 0;
+  
+  /* Truncate text to 3 lines */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// during loading of posts
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  width: 100%;
+}
+
+// when no posts are found
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  width: 100%;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+  gap: 8px;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    opacity: 0.5;
+  }
+}

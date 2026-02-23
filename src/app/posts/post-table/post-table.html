@@ -1,0 +1,128 @@
+<!-- toolbar -->
+<div class="table-toolbar">
+  <mat-form-field
+    appearance="outline"
+    class="table-filter"
+    subscriptSizing="dynamic">
+    <mat-label>Filter posts</mat-label>
+    <input
+      matInput
+      (input)="applyFilter($event)"
+      placeholder="Search by title"
+      aria-label="Filter posts" />
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  @if (selection.hasValue()) {
+  <div class="selection-actions">
+    <span class="selection-count">
+      {{ selection.selected.length }} selected
+    </span>
+    <button
+      mat-icon-button
+      color="warn"
+      (click)="deleteSelected()"
+      matTooltip="Delete selected"
+      aria-label="Delete selected posts">
+      <mat-icon>delete_sweep</mat-icon>
+    </button>
+  </div>
+  }
+</div>
+
+<div class="table-container">
+  @if (isLoadingResults()) {
+  <div class="post-table-loading-shade">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+  } @else if (dataSource.data.length === 0) {
+  <div class="empty-state">
+    <mat-icon class="empty-icon"> folder_open </mat-icon>
+    <span>No posts found</span>
+  </div>
+  }
+
+  <table mat-table [dataSource]="dataSource" [trackBy]="trackByPostId" matSort aria-label="Post Table">
+    <!-- checkbox column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox
+          (change)="$event ? toggleAllRows() : null"
+          [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()"
+          [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox
+          (click)="$event.stopPropagation()"
+          (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)"
+          [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- title column -->
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Title</th>
+      <td mat-cell *matCellDef="let post">{{ post.title }}</td>
+    </ng-container>
+
+    <!-- category column -->
+    <ng-container matColumnDef="category">
+      <th mat-header-cell *matHeaderCellDef>Category</th>
+      <td mat-cell *matCellDef="let post">{{ post.category }}</td>
+    </ng-container>
+
+    <!-- start date -->
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
+      <td mat-cell *matCellDef="let post">
+        {{ post.date | date: 'mediumDate' }}
+      </td>
+    </ng-container>
+
+    <!-- actions column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef aria-label="Actions"></th>
+      <td mat-cell *matCellDef="let post">
+        <button
+          mat-icon-button
+          [matMenuTriggerFor]="menu"
+          aria-label="Post actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <a mat-menu-item [routerLink]="['/posts', post.id]">
+            <mat-icon>open_in_new</mat-icon>
+            <span>Open</span>
+          </a>
+          <a mat-menu-item [routerLink]="['/posts', post.id, 'edit']">
+            <mat-icon>edit</mat-icon>
+            <span>Edit</span>
+          </a>
+          <button
+            mat-menu-item
+            [appPostDelete]="post.id"
+            (deleted)="onPostDeleted($event)">
+            <mat-icon color="warn">delete</mat-icon>
+            <span class="delete-text">Delete</span>
+          </button>
+        </mat-menu>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: columnsToDisplay;"></tr>
+  </table>
+</div>
+
+<mat-paginator
+  #paginator
+  [pageSize]="10"
+  [pageSizeOptions]="[5, 10, 25, 100]"
+  aria-label="Select page">
+</mat-paginator>

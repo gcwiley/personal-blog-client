@@ -1,0 +1,39 @@
+.post-toolbar-container {
+  display: flex;
+  align-items: center;
+  padding: 16px 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.flex-spacer {
+  flex: 1 1 auto;
+}
+
+.sort-field {
+  width: 160px;
+}
+
+// Responsive adjustments
+@media (max-width: 600px) {
+  .post-toolbar-container {
+    flex-direction: column-reverse;
+    align-items: stretch;
+
+    .flex-spacer {
+      display: none;
+    }
+
+    .sort-field {
+      width: 100%;
+    }
+
+    mat-button-toggle-group {
+      width: 100%;
+
+      mat-button-toggle {
+        flex: 1;
+      }
+    }
+  }
+}
