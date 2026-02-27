@@ -29,7 +29,6 @@
   flex: 1 1 auto;
 }
 
-/* scope button styles to navbar only (avoid global overrides) */
 .navbar-content button,
 .navbar-content a[mat-icon-button] {
   color: var(--mat-sys-on-primary);
@@ -39,7 +38,6 @@
   border-radius: 8px;
 }
 
-/* focus and keyboard-visible outline */
 .navbar-content button:focus-visible,
 .navbar-content a[mat-icon-button]:focus-visible {
   outline: 3px solid rgba(255, 255, 255, 0.12);

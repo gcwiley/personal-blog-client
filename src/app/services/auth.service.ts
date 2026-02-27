@@ -9,7 +9,7 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
-  public signInWithEmailAndPassword(email: string, password: string): Observable<{ token: string }> {
+  public signInUser(email: string, password: string): Observable<{ token: string }> {
     return this.http.post<{ token: string }>('/api/auth/login', { email, password }).pipe(
       tap(response => {
         this.setToken(response.token);
@@ -46,7 +46,7 @@ export class AuthService {
     return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
-  getToken(): string | null {
+  public getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 }
