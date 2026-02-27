@@ -36,7 +36,7 @@ export const routes: Routes = [
         path: '',
         title: 'Posts',
         loadComponent: () =>
-          import('./pages/post-pages/post-grid-page/post-grid-page').then(
+          import('./pages/post-pages/post-display-page/post-grid-page').then(
             (m) => m.PostGridPage,
           ),
       },

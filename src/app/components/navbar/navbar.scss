@@ -17,19 +17,6 @@
   width: 100%;
 }
 
-/* logo */
-.logo-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-decoration: none;
-}
-.logo-link app-logo {
-  width: 35px;
-  height: auto;
-}
-
-/* title */
 .title {
   margin-left: 0.5rem;
   font-weight: 200;
@@ -38,7 +25,6 @@
   cursor: pointer;
 }
 
-/* spacing */
 .flex-spacer {
   flex: 1 1 auto;
 }

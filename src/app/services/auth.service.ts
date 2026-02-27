@@ -1,103 +1,52 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, from, throwError, map } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, BehaviorSubject, tap } from 'rxjs';
 
-// firebase auth
-import {
-  Auth,
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  GoogleAuthProvider,
-  signOut,
-  UserCredential,
-  signInAnonymously,
-  user,
-  User,
-  updatePassword,
-  sendPasswordResetEmail,
-} from '@angular/fire/auth';
-
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly auth = inject(Auth);
+  private readonly TOKEN_KEY = 'jwt_token';
+  private authStatus = new BehaviorSubject<boolean>(this.hasToken());
 
-  // observable for the current user (emits User object or null)
-  public readonly user$: Observable<User | null> = user(this.auth);
+  private http = inject(HttpClient);
 
-  // observable for the authentication status (emits true if logged in, false otherwise)
-  public readonly isAuthenticated$: Observable<boolean> = this.user$.pipe(
-    map((user) => !!user)
-  );
-
-  // CREATE NEW USER
-  public createUserWithEmailAndPassword(
-    email: string,
-    password: string
-  ): Observable<UserCredential> {
-    return from(
-      createUserWithEmailAndPassword(this.auth, email, password)
-    ).pipe(catchError((error) => this.handleError(error)));
-  }
-
-  // SIGN IN WITH EMAIL AND PASSWORD
-  public signInWithEmailAndPassword(
-    email: string,
-    password: string
-  ): Observable<UserCredential> {
-    return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
-      catchError((error) => this.handleError(error))
+  public signInWithEmailAndPassword(email: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>('/api/auth/login', { email, password }).pipe(
+      tap(response => {
+        this.setToken(response.token);
+        this.authStatus.next(true);
+      })
     );
   }
 
-  // SIGN IN WITH GOOGLE
-  public signInWithGoogle(): Observable<UserCredential> {
-    return from(signInWithPopup(this.auth, new GoogleAuthProvider())).pipe(
-      catchError((error) => this.handleError(error))
+  public register(email: string, password: string): Observable<{ token: string }> {
+    return this.http.post<{ token: string }>('/api/auth/register', { email, password }).pipe(
+      tap(response => {
+        this.setToken(response.token);
+        this.authStatus.next(true);
+      })
     );
   }
 
-  // SIGN IN ANONYMOUSLY
-  public signInAnonymously(): Observable<UserCredential> {
-    return from(signInAnonymously(this.auth)).pipe(
-      catchError((error) => this.handleError(error))
-    );
+  public signOutUser(): void {
+    this.removeToken();
+    this.authStatus.next(false);
   }
 
-  // SIGN OUT USER
-  public signOutUser(): Observable<void> {
-    return from(signOut(this.auth)).pipe(
-      catchError((error) => this.handleError(error))
-    );
+  isAuthenticated$ = this.authStatus.asObservable();
+
+  private setToken(token: string) {
+    localStorage.setItem(this.TOKEN_KEY, token);
   }
 
-  // RESET PASSWORD
-  public sendPasswordResetEmail(email: string): Observable<void> {
-    return from(sendPasswordResetEmail(this.auth, email)).pipe(
-      catchError((error) => this.handleError(error))
-    );
+  private removeToken() {
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  // CHANGE USER PASSWORD
-  public changeUserPassword(newPassword: string): Observable<void> {
-    // get the current user
-    const currentUser = this.auth.currentUser;
-
-    if (currentUser) {
-      // use the updatePassword function with the current user and new password
-      return from(updatePassword(currentUser, newPassword)).pipe(
-        catchError(this.handleError) // handle error
-      );
-    } else {
-      // if there's no current user, throw an error
-      return throwError(() => new Error('No user is currently logged in.'));
-    }
+  private hasToken(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 
-  // HANDLE ERROR
-  private handleError(error: Error): Observable<never> {
-    console.error('There was an error', error);
-    return throwError(() => error);
+  getToken(): string | null {
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 }

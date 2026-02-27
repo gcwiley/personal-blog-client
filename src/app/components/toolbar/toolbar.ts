@@ -28,7 +28,6 @@ export type SortMode = 'newest' | 'oldest';
 ],
 })
 export class Toolbar {
-  // two way bindable signal for the view mode
   public viewMode = model<PostViewMode>('table');
   public sortMode = model<SortMode>('newest');
 }
