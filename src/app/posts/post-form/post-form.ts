@@ -7,8 +7,6 @@ import {
 } from '@angular/core';
 import { FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-
-// rxjs
 import { of, first, switchMap, finalize } from 'rxjs';
 
 // angular material

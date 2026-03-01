@@ -28,6 +28,13 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/signin-page/signin-page').then((m) => m.SigninPage),
   },
+  // sign up page
+  {
+    path: 'signup',
+    title: 'Create New Account',
+    loadComponent: () =>
+      import('./pages/signup-page/signup-page').then((m) => m.SignupPage),
+  },
   // grouped post routes
   {
     path: 'posts',
@@ -35,9 +42,10 @@ export const routes: Routes = [
       {
         path: '',
         title: 'Posts',
+        canActivate: [authGuard],
         loadComponent: () =>
-          import('./pages/post-pages/post-display-page/post-grid-page').then(
-            (m) => m.PostGridPage,
+          import('./pages/post-pages/post-display-page/post-display-page').then(
+            (m) => m.PostDisplayPage,
           ),
       },
       {
@@ -63,6 +71,7 @@ export const routes: Routes = [
       {
         path: ':id',
         title: postTitleResolver,
+        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/post-pages/post-details-page/post-details-page').then(
             (m) => m.PostDetailsPage,
@@ -77,7 +86,7 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/error-page/error-page').then((m) => m.ErrorPage),
   },
-  // page not found - wild card route
+  // page not found
   {
     path: '**',
     title: 'Page Not Found',

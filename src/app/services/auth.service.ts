@@ -1,35 +1,57 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'jwt_token';
   private authStatus = new BehaviorSubject<boolean>(this.hasToken());
 
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
-  public signInUser(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>('/api/auth/login', { email, password }).pipe(
-      tap(response => {
-        this.setToken(response.token);
-        this.authStatus.next(true);
-      })
-    );
+  private readonly currentUser = new BehaviorSubject<{ email: string } | null>(
+    null,
+  );
+  public readonly userEmail$ = this.currentUser.pipe(
+    map((user) => user?.email ?? null),
+  );
+
+  public signInUser(
+    username: string,
+    password: string,
+  ): Observable<{ token: string; user: { email: string } }> {
+    return this.http
+      .post<{ token: string; user: { email: string } }>('/api/auth/signin', { username, password })
+      .pipe(
+        tap((response) => {
+          this.setToken(response.token);
+          this.authStatus.next(true);
+          this.currentUser.next(response.user);
+        }),
+      );
   }
 
-  public register(email: string, password: string): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>('/api/auth/register', { email, password }).pipe(
-      tap(response => {
-        this.setToken(response.token);
-        this.authStatus.next(true);
-      })
-    );
+  public registerNewUser(
+    username: string,
+    email: string,
+    password: string,
+  ): Observable<{ token: string }> {
+    return this.http
+      .post<{
+        token: string;
+      }>('/api/auth/register', { username, email, password })
+      .pipe(
+        tap((response) => {
+          this.setToken(response.token);
+          this.authStatus.next(true);
+        }),
+      );
   }
 
   public signOutUser(): void {
     this.removeToken();
     this.authStatus.next(false);
+    this.currentUser.next(null);
   }
 
   isAuthenticated$ = this.authStatus.asObservable();

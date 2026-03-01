@@ -2,10 +2,31 @@
   <mat-card class="signin-form" appearance="raised">
     <div class="title-text">
       <h1>My Blog</h1>
-      <p>Please sign in.</p>
+      <p>Please register for a new account.</p>
     </div>
     <mat-card-content>
-      <form [formGroup]="signinForm" (ngSubmit)="onSubmitSignIn()">
+      <form [formGroup]="signUpForm" (ngSubmit)="onSubmitSignUp()">
+
+        <!-- username -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            type="text"
+            formControlName="username"
+            placeholder="Enter a username"
+            autocomplete="username" />
+          @if (signUpForm.get('username')?.hasError('required')) {
+          <mat-error id="username-required" aria-live="polite"
+            >Please enter a username.</mat-error
+          >
+          } @if (signUpForm.get('username')?.hasError('minlength')) {
+          <mat-error id="username-invalid" aria-live="polite"
+            >Username must be at least 3 characters.</mat-error
+          >
+          }
+        </mat-form-field>
+
         <!-- email -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Email</mat-label>
@@ -13,13 +34,13 @@
             matInput
             type="email"
             formControlName="email"
-            title="name@example.com"
-            autocomplete="username" />
-          @if (formControls['email'].hasError('required')) {
+            placeholder="name@example.com"
+            autocomplete="email" />
+          @if (signUpForm.get('email')?.hasError('required')) {
           <mat-error id="email-required" aria-live="polite"
             >Please enter your email address.</mat-error
           >
-          } @if (formControls['email'].hasError('email')) {
+          } @if (signUpForm.get('email')?.hasError('email')) {
           <mat-error id="email-invalid" aria-live="polite"
             >Invalid email format.</mat-error
           >
@@ -31,52 +52,48 @@
           <mat-label>Password</mat-label>
           <input
             matInput
-            [type]="showPassword ? 'text' : 'password'"
+            [type]="showPassword() ? 'text' : 'password'"
             formControlName="password"
-            title="Password"
-            autocomplete="current-password" />
+            placeholder="Create a password"
+            autocomplete="new-password" />
           <button
             mat-icon-button
             matSuffix
             type="button"
             (click)="toggleShowPassword()"
-            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
             <mat-icon>
-              {{ showPassword ? 'visibility_off' : 'visibility' }}
+              {{ showPassword() ? 'visibility_off' : 'visibility' }}
             </mat-icon>
           </button>
-          @if (formControls['password'].hasError('required')) {
+          @if (signUpForm.get('password')?.hasError('required')) {
           <mat-error id="password-required" aria-live="polite"
             >Please enter your password.</mat-error
           >
-          } @if (formControls['password'].hasError('minlength')) {
+          } @if (signUpForm.get('password')?.hasError('minlength')) {
           <mat-error id="password-invalid" aria-live="polite"
             >Your password must be at least 6 characters.</mat-error
           >
           }
         </mat-form-field>
 
-        <!-- forgot password -->
-        <div class="forgot-password">
-          <a routerLink="/forgot-password">Forgot Password?</a>
-        </div>
-
-        <!-- sign in form actions -->
+        <!-- sign up form actions -->
         <mat-card-actions>
           <button
             matButton="filled"
             class="sign-in-button"
             type="submit"
-            [disabled]="signinForm.invalid || isLoading">
-            Sign In
+            [disabled]="signUpForm.invalid || isLoading()">
+            <!-- ✅ loading spinner shown during request -->
+            @if (isLoading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            } @else { Sign Up }
           </button>
         </mat-card-actions>
       </form>
     </mat-card-content>
     <mat-card-footer
-      class="signin-footer"
-      role="contentinfo"
-      aria-label="Copyright">
+      class="signin-footer">
       <small>&copy; {{ year }} Gregory Wiley. All rights reserved.</small>
     </mat-card-footer>
   </mat-card>

@@ -1,13 +1,13 @@
 .signin-page-container {
   background: var(--mat-sys-primary-container);
-  background-image: url(../../../assets/images/sign_in_graphic.jpg);
+  background-image: url(/images/sign_in_graphic.jpg);
   background-size: cover;
   background-position: center;
   color: var(--mat-sys-primary);
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; // use min-height to avoid overflow issues on small screens
+  min-height: 100vh;
   padding: 2rem 1rem;
 }
 
@@ -15,8 +15,8 @@
   max-width: 400px;
   width: 100%;
   padding: 1.25rem;
-  background: rgba(255, 255, 255, 1); // white with 92% opacity
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12); // optional for depth
+  background: rgba(255, 255, 255, 1);
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.12);
   border-radius: 10px;
 }
 
@@ -64,53 +64,6 @@
   font-weight: 600;
 }
 
-.oauth-actions {
-  margin-top: 12px;
-  display: flex;
-  justify-content: center;
-  // thin grey divider between sign in and google button
-  border-top: 1px solid #e0e0e0;
-  padding-top: 12px;
-  margin-top: 16px; // give divider breathing room
-}
-
-.google-btn {
-  margin-top: 0.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  justify-content: center;
-  background: #fff;
-  color: #202124;
-  border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: none;
-  text-transform: none;
-}
-
-// icon container: force block rendering so baseline issues disappear
-.google-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;
-  height: 24px;
-  line-height: 0; // prevents baseline gap
-  margin-right: 10px;
-}
-
-.google-icon svg {
-  display: block;
-  width: 18px;
-  height: 18px;
-}
-
-// label
-.google-label {
-  font-weight: 600;
-  display: inline-block;
-}
-
 .signin-footer {
   font: var(--mat-sys-label-small);
   margin-top: 12px;
@@ -123,6 +76,22 @@
   font-size: 0.85rem;
   display: inline-block;
   margin-top: 6px;
+}
+
+.signin-footer-link {
+  font: var(--mat-sys-body-medium);
+  text-align: center;
+  margin: 0.5rem 0 1rem;
+
+  a {
+    color: var(--mat-sys-primary);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }
 
 // reduces padding on smaller screens for better mobile usability

@@ -1,39 +1,37 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
+  DestroyRef,
   inject,
+  signal,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
-  FormsModule,
   FormGroup,
   Validators,
   ReactiveFormsModule,
-  AbstractControl,
 } from '@angular/forms';
-
-// router
 import { Router, RouterModule } from '@angular/router';
-
-// rxjs
-import { catchError, of } from 'rxjs';
+import { catchError, of, finalize } from 'rxjs';
 
 // angular material
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // auth service
 import { AuthService } from '../../services/auth.service';
 
-// define constants for error messages
+// constants
+import { SNACK_BAR_DURATION_MS } from '../../constants/ui.constants';
+
 const ERROR_MESSAGES = {
-  INVALID_CREDENTIALS: 'Invalid email or password.',
+  DUPLICATE_USER: 'An account with that username or email already exists.', 
   NETWORK_ERROR: 'A network error occurred. Please try again later.',
   UNKNOWN_ERROR: 'An unexpected error occurred.',
 };
@@ -45,21 +43,19 @@ const ERROR_MESSAGES = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
+    RouterModule,
     MatCardModule,
     MatInputModule,
     MatFormFieldModule,
-    MatCheckboxModule,
     MatButtonModule,
     MatIconModule,
-    FormsModule,
-    RouterModule
-],
+    MatProgressSpinnerModule,
+  ],
 })
-export class SignupPage implements OnInit {
-  public signinForm!: FormGroup;
-  public isLoading = false;
-  public errorMessage: string | null = null;
-  public showPassword = false;
+export class SignupPage {
+  // signals work correctly with OnPush
+  public readonly isLoading = signal(false);
+  public readonly showPassword = signal(false);
   public readonly year = new Date().getFullYear();
 
   // inject dependencies
@@ -67,68 +63,48 @@ export class SignupPage implements OnInit {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef = inject(DestroyRef);
 
-  public ngOnInit(): void {
-    this.initializeForm();
-  }
-
-  // create the signin form with email and password fields
-  private initializeForm(): void {
-    this.signinForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-    });
-  }
+  // initialized inline - no need for OnInit
+  public readonly signUpForm: FormGroup = this.formBuilder.group({
+    username: ['', [Validators.required, Validators.minLength(3)]],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]],
+  });
 
   public toggleShowPassword(): void {
-    this.showPassword = !this.showPassword;
+    this.showPassword.update((v) => !v);
   }
 
-  // sign in with email and password, if successful, navigate authenticated user to the home page
-  public onSubmitSignIn(): void {
-    this.errorMessage = null;
-    if (this.signinForm.invalid) {
-      return;
-    }
+  public onSubmitSignUp(): void {
+    if (this.signUpForm.invalid) return;
 
-    this.isLoading = true;
-    const { email, password } = this.signinForm.value;
+    this.isLoading.set(true);
+    const { username, email, password } = this.signUpForm.value;
 
     this.authService
-      .signInWithEmailAndPassword(email, password)
+      .registerNewUser(username, email, password)
       .pipe(
         catchError((error) => {
-          let message = ERROR_MESSAGES.UNKNOWN_ERROR;
-          if (
-            error.code === 'auth/user-not-found' ||
-            error.code === 'auth/wrong-password'
-          ) {
-            message = ERROR_MESSAGES.INVALID_CREDENTIALS;
-          } else if (error.code === 'auth/network-request-failed') {
-            message = ERROR_MESSAGES.NETWORK_ERROR;
-          }
-          this.errorMessage = message;
-          return of(null); // Return an observable of null to continue the stream
-        })
-      )
-      .subscribe({
-        next: (user) => {
-          this.isLoading = false;
-          if (user) {
-            this.router.navigateByUrl('/');
-          } else {
-            this.snackBar.open(this.errorMessage!, 'Close');
-          }
-        },
-        error: () => {
-          this.isLoading = false;
-          this.snackBar.open(ERROR_MESSAGES.UNKNOWN_ERROR, 'Close');
-        },
-      });
-  }
+          const message =
+            error.status === 409
+              ? ERROR_MESSAGES.DUPLICATE_USER
+              : error.status === 0
+                ? ERROR_MESSAGES.NETWORK_ERROR
+                : ERROR_MESSAGES.UNKNOWN_ERROR;
 
-  // Getter for easy access to form controls in the template
-  get formControls(): Record<string, AbstractControl> {
-    return this.signinForm.controls;
+          this.snackBar.open(message, 'Close', {
+            duration: SNACK_BAR_DURATION_MS,
+          });
+          return of(null);
+        }),
+        finalize(() => this.isLoading.set(false)),
+        takeUntilDestroyed(this.destroyRef), // ✅ prevents memory leak
+      )
+      .subscribe((response) => {
+        if (response) {
+          this.router.navigateByUrl('/');
+        }
+      });
   }
 }
