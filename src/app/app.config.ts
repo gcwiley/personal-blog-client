@@ -7,7 +7,9 @@ import {
 } from '@angular/router';
 
 // configures Angular's HttpClient service to be available for injection.
-import { provideHttpClient, withFetch } from '@angular/common/http';
+import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
+
+import { authInterceptor } from './interceptors/auth.interceptor';
 
 // routes
 import { routes } from './app.routes';
@@ -20,6 +22,6 @@ export const appConfig: ApplicationConfig = {
       withViewTransitions(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
     ),
-    provideHttpClient(withFetch()),
+    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
   ],
 };

@@ -4,20 +4,14 @@
   grid-template-columns: 1fr;
   gap: 24px;
   padding: 16px 0;
-  max-width: 100%; 
-  margin: 0 auto;   /* Optional: centers the feed on the page */
+  max-width: 100%;
+  margin: 0 auto;
 }
 
 .post-card {
   display: flex;
   flex-direction: column;
   height: 100%;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  }
 
   mat-card-header {
     margin-bottom: 12px;
@@ -30,7 +24,7 @@
   }
 
   mat-card-content {
-    flex-grow: 1; /* Pushes the actions to the bottom */
+    flex-grow: 1;
   }
 }
 
@@ -38,10 +32,11 @@
   color: var(--mat-sys-on-surface-variant);
   line-height: 1.6;
   margin: 0;
-  
+
   /* Truncate text to 3 lines */
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
