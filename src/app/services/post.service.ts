@@ -79,7 +79,7 @@ export class PostService {
 
   // GET: - GET POST COUNT
   public getPostsCount(): Observable<number> {
-    return this.http.get<ApiResponse<number>>(`${this.API_URL}`).pipe(
+    return this.http.get<ApiResponse<number>>(`${this.API_URL}/count`).pipe(
       retry(this.DEFAULT_RETRY),
       map((res) => res.data),
       catchError((error) => this.handleError(error)),

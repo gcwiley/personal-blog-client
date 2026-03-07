@@ -21,8 +21,8 @@ import { MatChipsModule } from '@angular/material/chips';
   imports: [DatePipe, MatChipsModule],
 })
 export class Clock implements OnInit {
-  public currentTime = signal(new Date());
-  private destroyRef = inject(DestroyRef);
+  public readonly currentTime = signal(new Date());
+  private readonly destroyRef = inject(DestroyRef);
 
   public readonly timeZones = [
     { label: 'Local', offset: '' },

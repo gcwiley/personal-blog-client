@@ -1,8 +1,21 @@
-.post-toolbar-container {
+@use '../../../styles/helpers/constants';
+
+.toolbar-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.toolbar-content {
+  max-width: constants.$max-width;
+  margin: auto;
+  padding: 0.75rem 1rem;
   display: flex;
   align-items: center;
-  padding: 16px 0;
-  gap: 16px;
+  gap: 1rem;
   flex-wrap: wrap;
 }
 
@@ -10,22 +23,19 @@
   flex: 1 1 auto;
 }
 
-.sort-field {
-  width: 160px;
+.post-count {
+  font-size: 0.875rem;
+  color: var(--mat-sys-on-surface-variant);
 }
 
 // responsive adjustments
 @media (max-width: 600px) {
-  .post-toolbar-container {
+  .toolbar-content {
     flex-direction: column-reverse;
     align-items: stretch;
 
     .flex-spacer {
       display: none;
-    }
-
-    .sort-field {
-      width: 100%;
     }
 
     mat-button-toggle-group {

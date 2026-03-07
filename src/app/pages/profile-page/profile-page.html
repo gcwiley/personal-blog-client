@@ -1,1 +1,37 @@
-<p>profile-page works!</p>
+<header>
+  <app-navbar></app-navbar>
+  <app-clock></app-clock>
+</header>
+
+<main class="profile-page-container" role="main" aria-label="Profile Page">
+  <mat-card class="profile-card" appearance="outlined">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>account_circle</mat-icon>
+      <mat-card-title>My Profile</mat-card-title>
+      <mat-card-subtitle>Account information</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item lines="2">
+          <mat-icon matListItemIcon>email</mat-icon>
+          <span matListItemTitle>Email</span>
+          <span matListItemLine>{{ userEmail() ?? 'Not available' }}</span>
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+
+    <mat-divider></mat-divider>
+
+    <mat-card-actions>
+      <button mat-flat-button color="warn" type="button" (click)="signOut()">
+        <mat-icon>logout</mat-icon>
+        Sign Out
+      </button>
+    </mat-card-actions>
+  </mat-card>
+</main>
+
+<app-footer></app-footer>

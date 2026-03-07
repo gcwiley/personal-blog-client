@@ -15,7 +15,6 @@ import { MatDividerModule } from '@angular/material/divider';
 
 // services
 import { AuthService } from '../../services/auth.service';
-import { ThemeService } from '../../services/theme.service';
 
 // constants
 import { SNACK_BAR_DURATION_MS } from '../../constants/ui.constants';
@@ -38,17 +37,11 @@ import { SNACK_BAR_DURATION_MS } from '../../constants/ui.constants';
 export class Navbar {
   private readonly authService = inject(AuthService);
   private readonly snackBar = inject(MatSnackBar);
-  private readonly themeService = inject(ThemeService);
 
-  public readonly isDark$ = this.themeService.isDark$;
   public readonly isAuthenticated$: Observable<boolean> = this.authService.isAuthenticated$;
 
   // declared to match navbar.html usage
   public readonly userEmail$: Observable<string | null> = this.authService.userEmail$;
-
-  public toggleTheme(): void {
-    this.themeService.toggleTheme();
-  }
 
   public onClickSignOut(): void {
     try {

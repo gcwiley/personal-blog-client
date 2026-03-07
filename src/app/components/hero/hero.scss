@@ -12,11 +12,10 @@
   padding-top: 1.25rem;
   background-image: url('/images/banner_image.jpg');
   background-size: cover;
-  background-position: center bottom;
+  background-position: center center;
   background-repeat: no-repeat;
   background-color: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
-
   overflow: hidden;
 }
 
@@ -67,18 +66,20 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 
-// CTA 
 .hero-actions {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-a[mat-flat-button] {
+a[matButton] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   min-width: 96px;
+  color: var(--mat-sys-on-primary);
 }
 
 // smaller screens: reduce spacing and image size 
@@ -92,5 +93,8 @@ a[mat-flat-button] {
   }
   .title {
     font-size: 1.4rem;
+  }
+  .hero-actions {
+    margin-top: 0.75rem;
   }
 }

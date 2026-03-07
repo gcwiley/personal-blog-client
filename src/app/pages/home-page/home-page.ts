@@ -1,17 +1,12 @@
 import { Component } from '@angular/core';
 
-// angular material
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatCardModule } from '@angular/material/card';
-
 // shared components
 import {
   Navbar,
   Clock,
   Calendar,
   Hero,
+  Toolbar,
   Footer,
 } from '../../components/index';
 
@@ -23,13 +18,10 @@ import { PostGrid, RecentPosts } from '../../posts';
   templateUrl: './home-page.html',
   styleUrl: './home-page.scss',
   imports: [
-    MatButtonModule,
-    MatIconModule,
-    MatDividerModule,
-    MatCardModule,
     Navbar,
     Calendar,
     Clock,
+    Toolbar,
     Footer,
     Hero,
     PostGrid,

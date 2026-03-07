@@ -1,9 +1,28 @@
 @use '../../../styles/helpers/constants';
 
 .recent-posts {
-  margin: constants.$margin;
-  padding: constants.$padding;
-  border-style: constants.$border-style;
-  border-width: constants.$border-width;
+  width: 100%;
+  padding: 0;                              // mat-list has its own internal padding
+  // border: constants.$border-width constants.$border-style var(--mat-sys-outline-variant);
   border-radius: constants.$border-radius;
+  background-color: var(--mat-sys-primary-container);
+  overflow: hidden;
+
+  [mat-subheader] {
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    color: var(--mat-sys-on-primary-container);
+    padding-top: 1rem;
+  }
+
+  mat-list-item {
+    transition: background-color 150ms ease;
+
+    &:hover {
+      background-color: var(--mat-sys-surface-container-high);
+      cursor: pointer;
+    }
+  }
 }

@@ -2,18 +2,37 @@
 
 .post-create-page-container {
   max-width: constants.$max-width;
-  margin: auto;
-  min-height: 100vh;
+  margin: 2rem auto;          // breathing room — matches home-page
+  padding: 0 1rem;            // screen edge clearance — matches home-page
   display: flex;
   flex-direction: row;
+  gap: 2rem;                  // replaces manual margins on child components
+  min-height: 100vh;
+  isolation: isolate;
 }
 
 .main-content {
-  flex-basis: constants.$main-content-flex-basis;
-  max-width: constants.$main-content-max-width;
+  flex: 1 1 constants.$main-content-flex-basis;
+  min-width: 0;               // prevents long content overflowing flex
 }
 
 .side-content {
-  flex-basis: constants.$side-content-flex-basis;
+  flex: 0 0 constants.$side-content-flex-basis;
   max-width: constants.$side-content-max-width;
+  position: sticky;
+  top: 4rem;                  // keeps recent posts visible while scrolling the form
+  align-self: flex-start;
+}
+
+@media (max-width: 768px) {
+  .post-create-page-container {
+    flex-direction: column;
+  }
+
+  .main-content,
+  .side-content {
+    flex: 1 1 100%;
+    max-width: 100%;
+    position: static;
+  }
 }

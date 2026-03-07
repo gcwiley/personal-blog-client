@@ -1,3 +1,16 @@
+@use '../../../styles/helpers/constants';
+
 .calendar {
   width: 100%;
+  border-radius: constants.$border-radius;
+
+  // section label styling to match recent-posts
+  mat-card-header {
+    padding: 8px 16px 0;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--mat-sys-on-surface-variant);
+  }
 }

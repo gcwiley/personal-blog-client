@@ -21,6 +21,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./pages/about-page/about-page').then((m) => m.AboutPage),
   },
+  // profile page
+  {
+    path: 'profile',
+    title: 'My Profile',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./pages/profile-page/profile-page').then((m) => m.ProfilePage),
+  },
   // sign in page
   {
     path: 'signin',

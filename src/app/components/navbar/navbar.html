@@ -1,65 +1,74 @@
-<nav role="navigation" aria-label="Main Navigation">
+<nav aria-label="Main Navigation">
   <mat-toolbar class="navbar-container">
     <div class="navbar-content">
       <!-- app title -->
-      <a routerLink="/" class="title">My Blog</a>
+      <a routerLink="/" class="title">
+        <img src="logos/angular-logo.svg" alt="My Blog logo" class="nav-logo" />
+        My Blog
+      </a>
 
       <span class="flex-spacer" aria-hidden="true"></span>
 
-      <!-- user feedback -->
-      <a mat-icon-button aria-label="Provide feedback">
+      <!-- user feedback - should open a dialog -->
+      <button mat-icon-button aria-label="Provide feedback">
         <mat-icon>feedback</mat-icon>
-      </a>
-
-      <!-- theme toggle -->
-      <button
-        mat-icon-button
-        (click)="toggleTheme()"
-        [attr.aria-label]="(isDark$ | async) ? 'Switch to light mode' : 'Switch to dark mode'">
-        <mat-icon>{{ (isDark$ | async) ? 'light_mode' : 'dark_mode' }}</mat-icon>
       </button>
 
       <!-- show admin menu only when authenticated -->
       @if (isAuthenticated$ | async) {
+      <button
+        mat-icon-button
+        class="admin-btn"
+        aria-label="Open account menu"
+        [matMenuTriggerFor]="adminMenu"
+        type="button">
+        <mat-icon aria-hidden="false">account_circle</mat-icon>
+      </button>
+
+      <mat-menu #adminMenu="matMenu" xPosition="before" yPosition="below">
+        <!-- display user email -->
+        @if (userEmail$ | async; as email) {
+        <div class="email">Signed in as<br /><strong>{{ email }}</strong></div>
+        <mat-divider></mat-divider>
+        }
+
+        <!-- routerLinkActive applies .active-link defined in navbar.scss -->
         <button
-          mat-icon-button
-          class="admin-btn"
-          aria-label="Open account menu"
-          [matMenuTriggerFor]="adminMenu"
+          mat-menu-item
+          routerLink="/posts"
+          routerLinkActive="active-link"
           type="button">
-          <mat-icon aria-hidden="false">account_circle</mat-icon>
+          <mat-icon>article</mat-icon>
+          <span>Posts</span>
+        </button>
+        <button
+          mat-menu-item
+          routerLink="/posts/create"
+          routerLinkActive="active-link"
+          type="button">
+          <mat-icon>add</mat-icon>
+          <span>Create Post</span>
+        </button>
+        <button
+          mat-menu-item
+          routerLink="/profile"
+          routerLinkActive="active-link"
+          type="button">
+          <mat-icon>account_circle</mat-icon>
+          <span>My Profile</span>
         </button>
 
-        <mat-menu #adminMenu="matMenu" xPosition="before" yPosition="below">
-          <!-- display user email -->
-          @if (userEmail$ | async; as email) {
-            <div class="email">
-              Signed in as<br /><strong>{{ email }}</strong>
-            </div>
-            <mat-divider></mat-divider>
-          }
+        <mat-divider></mat-divider>
 
-          <!-- ✅ routerLinkActive applies .active-link defined in navbar.scss -->
-          <button mat-menu-item routerLink="/posts" routerLinkActive="active-link" type="button">
-            <mat-icon>article</mat-icon>
-            <span>Posts</span>
-          </button>
-          <button mat-menu-item routerLink="/posts/create" routerLinkActive="active-link" type="button">
-            <mat-icon>add</mat-icon>
-            <span>Create Post</span>
-          </button>
-
-          <mat-divider></mat-divider>
-
-          <button mat-menu-item (click)="onClickSignOut()" type="button">
-            <mat-icon>logout</mat-icon>
-            <span>Sign Out</span>
-          </button>
-        </mat-menu>
+        <button mat-menu-item (click)="onClickSignOut()" type="button">
+          <mat-icon>logout</mat-icon>
+          <span>Sign Out</span>
+        </button>
+      </mat-menu>
       } @else {
-        <a mat-icon-button routerLink="/signin" aria-label="Sign in">
-          <mat-icon>login</mat-icon>
-        </a>
+      <a mat-icon-button routerLink="/signin" aria-label="Sign in">
+        <mat-icon>login</mat-icon>
+      </a>
       }
     </div>
   </mat-toolbar>

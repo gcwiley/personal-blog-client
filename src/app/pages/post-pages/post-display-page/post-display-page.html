@@ -1,18 +1,16 @@
 <header>
   <app-navbar></app-navbar>
+  <app-clock></app-clock>
 </header>
 
-<app-clock></app-clock>
+<app-toolbar [(viewMode)]="currentView"></app-toolbar>
 
-<main class="post-grid-page-container">
-  <app-toolbar [(viewMode)]="currentView"></app-toolbar>
-
+<main class="post-grid-page-container" role="main" aria-label="Posts">
   @if (currentView() === 'table') {
-    <app-post-table></app-post-table>
+  <app-post-table></app-post-table>
   } @else {
-   <app-post-grid></app-post-grid> 
+  <app-post-grid></app-post-grid>
   }
-  
 </main>
 
 <app-footer></app-footer>

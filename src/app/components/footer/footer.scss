@@ -3,7 +3,7 @@
 .footer {
   background: var(--mat-sys-primary);
   color: var(--mat-sys-on-primary);
-  font: var(--mat-sys-title-medium);
+  font-size: var(--mat-sys-title-medium-size);
   font-weight: 100;
 }
 
@@ -60,7 +60,7 @@
 
 .footer-logo-link:focus,
 .footer-link:focus {
-  outline: 3px solid rgba(255, 255, 255, 0.12);
+  outline: 3px solid rgba(255, 255, 255, 0.75);
   outline-offset: 4px;
   border-radius: 4px;
 }
@@ -71,12 +71,18 @@
   margin-left: 0.5rem;
 }
 
+.footer-copy {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* responsive */
 @media (max-width: 600px) {
   .footer-content {
     justify-content: center;
     text-align: center;
   }
+  .footer-left,
   .footer-right {
     width: 100%;
     justify-content: center;

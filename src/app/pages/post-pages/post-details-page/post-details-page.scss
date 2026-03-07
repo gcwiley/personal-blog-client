@@ -2,18 +2,48 @@
 
 .post-details-page-container {
   max-width: constants.$max-width;
-  margin: auto;
+  margin: 2rem auto;          // matches home-page: top/bottom breathing room
+  padding: 0 1rem;            // matches home-page: screen edge clearance
   display: flex;
   flex-direction: row;
+  gap: 2rem;                  // replaces manual margins on child components
   min-height: 100vh;
+  isolation: isolate;
+}
+
+.back-button {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 3rem;           // aligns with article top margin
 }
 
 .main-content {
-  flex-basis: constants.$main-content-flex-basis;
-  max-width: constants.$main-content-max-width;
+  flex: 1 1 constants.$main-content-flex-basis;
+  min-width: 0;               // prevents long titles overflowing the flex container
 }
 
 .side-content {
-  flex-basis: constants.$side-content-flex-basis;
+  flex: 0 0 constants.$side-content-flex-basis;
   max-width: constants.$side-content-max-width;
+  position: sticky;
+  top: 4rem;                  // keeps sidebar visible while scrolling
+  align-self: flex-start;
+}
+
+// responsive: stack on small screens
+@media (max-width: 768px) {
+  .post-details-page-container {
+    flex-direction: column;
+  }
+
+  .main-content,
+  .side-content {
+    flex: 1 1 100%;
+    max-width: 100%;
+    position: static;
+  }
+
+  .back-button {
+    margin-top: 1rem;
+  }
 }

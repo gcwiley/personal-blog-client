@@ -2,20 +2,48 @@
 
 .home-page-container {
   max-width: constants.$max-width;
-  margin: auto;
+  margin: 2rem auto; // top/bottom breathing room
+  padding: 0 1rem; // screen edge clearance
   display: flex;
   flex-direction: row;
+  gap: 2rem;
   min-height: 100vh;
+  isolation: isolate;
 }
 
 .main-content {
-  flex-basis: 70%;
-  max-width: 70%;
-  margin-right: 2rem;
+  flex: 1 1 constants.$main-content-flex-basis;
+  min-width: 0; // prevents long titles overflowing flex
 }
 
 .side-content {
-  flex-basis: 30%;
-  max-width: 30%;
-  padding: 1rem;
+  flex: 0 0 constants.$side-content-flex-basis;
+  max-width: constants.$side-content-max-width;
+  position: sticky;
+  top: 4rem; // clears the sticky toolbar height
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem; // space between calendar and recent posts
+}
+
+.section-heading {
+  font-weight: 300;
+  font-size: 1.4rem;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--mat-sys-outline-variant);
+  color: var(--mat-sys-on-surface);
+}
+
+@media (max-width: 768px) {
+  .home-page-container {
+    flex-direction: column;
+  }
+
+  .main-content,
+  .side-content {
+    flex: 1 1 100%;
+    max-width: 100%;
+    position: static;
+  }
 }

@@ -2,13 +2,16 @@
   <app-navbar></app-navbar>
 </header>
 
-<section aria-label="Hero Section">
-  <app-clock></app-clock>
-  <app-hero></app-hero>
-</section>
+<app-hero></app-hero>
+<app-clock></app-clock>
+<app-toolbar></app-toolbar>
 
-<main class="home-page-container" role="main" aria-label="Homepage Main Content">
+<main
+  class="home-page-container"
+  role="main"
+  aria-label="Homepage Main Content">
   <article class="main-content">
+    <h2 class="section-heading">Latest Posts</h2>
     <app-post-grid></app-post-grid>
   </article>
 

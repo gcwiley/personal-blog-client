@@ -1,35 +1,54 @@
-<div class="post-toolbar-container">
-  <button mat-flat-button routerLink="/posts/create">
-    <mat-icon>add</mat-icon>
-    Create Post
-  </button>
+<div class="toolbar-container">
+  <div class="toolbar-content">
+    <button mat-flat-button type="button" routerLink="/posts/create">
+      <mat-icon>add</mat-icon>
+      Create Post
+    </button>
 
-  <span class="flex-spacer"></span>
+    <!-- post count -->
+    @if (postCount$ | async; as count) {
+    <span class="post-count">{{ count }} posts</span>
+    }
 
-  <!-- New Sort Dropdown -->
-  <mat-form-field
-    appearance="outline"
-    subscriptSizing="dynamic"
-    class="sort-field">
-    <mat-label>Sort by</mat-label>
-    <mat-select [(value)]="sortMode">
-      <mat-option value="newest">Newest First</mat-option>
-      <mat-option value="oldest">Oldest First</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <span class="flex-spacer"></span>
 
-  <mat-button-toggle-group [(value)]="viewMode" aria-label="Select view mode">
-    <mat-button-toggle
-      value="grid"
-      aria-label="Grid View"
-      matTooltip="Grid View">
-      <mat-icon>grid_view</mat-icon>
-    </mat-button-toggle>
-    <mat-button-toggle
-      value="table"
-      aria-label="Table View"
-      matTooltip="Table View">
-      <mat-icon>table_rows</mat-icon>
-    </mat-button-toggle>
-  </mat-button-toggle-group>
+    <button
+      mat-icon-button
+      type="button"
+      (click)="toggleTheme()"
+      [matTooltip]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      aria-label="Toggle theme">
+      <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
+
+    <mat-button-toggle-group [(value)]="sortOrder" aria-label="Sort order">
+      <mat-button-toggle
+        value="desc"
+        matTooltip="Newest first"
+        aria-label="Newest first">
+        <mat-icon>arrow_downward</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle
+        value="asc"
+        matTooltip="Oldest first"
+        aria-label="Oldest first">
+        <mat-icon>arrow_upward</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-button-toggle-group [(value)]="viewMode" aria-label="Select view mode">
+      <mat-button-toggle
+        value="grid"
+        aria-label="Grid View"
+        matTooltip="Grid View">
+        <mat-icon>grid_view</mat-icon>
+      </mat-button-toggle>
+      <mat-button-toggle
+        value="table"
+        aria-label="Table View"
+        matTooltip="Table View">
+        <mat-icon>table_rows</mat-icon>
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
 </div>

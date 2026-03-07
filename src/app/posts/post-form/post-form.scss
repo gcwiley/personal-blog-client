@@ -8,28 +8,25 @@
   width: 100%;
 }
 
-/* FLEX PROPERTIES */
 .row {
   display: flex;
   flex-direction: row;
-  gap: 20px; // use gap for spacing between columns
+  gap: 1rem;
 }
 
 .col {
   flex: 1;
-  margin-right: 0;
+  min-width: 0;
 }
 
-.card-actions button {
-  margin: 0.5rem;
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem 1rem;
 }
 
-// responsive design for small screens
 @media (max-width: 600px) {
   .row {
     flex-direction: column;
-  }
-  .col {
-    margin-bottom: 1rem;
   }
 }

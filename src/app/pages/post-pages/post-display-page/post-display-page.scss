@@ -2,6 +2,8 @@
 
 .post-grid-page-container {
   max-width: constants.$max-width;
-  margin: auto;
+  margin: 0 auto;             // toolbar is sticky, so no top margin needed here
+  padding: 0 1rem;            // screen edge clearance — matches home-page
   min-height: 100vh;
+  isolation: isolate;
 }

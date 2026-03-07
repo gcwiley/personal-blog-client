@@ -13,5 +13,5 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class Hero {
   public readonly title = input<string>('My Blog');
-  public subtitle = input<string>('My opinions and thoughts');
+  public readonly subtitle = input<string>('My opinions and thoughts');
 }

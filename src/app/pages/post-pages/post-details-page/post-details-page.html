@@ -1,11 +1,13 @@
 <header>
   <app-navbar></app-navbar>
+  <app-clock></app-clock>
 </header>
-
-<app-clock></app-clock>
 
 <main class="post-details-page-container" aria-label="Post Details Page">
   <article class="main-content">
+    <button mat-icon-button class="back-button" (click)="goBack()" aria-label="Back to posts">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
     <app-post-description></app-post-description>
   </article>
 
