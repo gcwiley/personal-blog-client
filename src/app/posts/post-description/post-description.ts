@@ -31,7 +31,7 @@ export class PostDescription {
       this.postService.getPostById(id).pipe(
         catchError((error) => {
           console.error('Error fetching post:', error);
-          return of(undefined); // signal not found/error to template
+          return of(undefined);
         })
       )
     )

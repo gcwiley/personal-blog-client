@@ -3,6 +3,7 @@ export { Calendar } from "./calendar/calendar";
 export { Clock } from "./clock/clock";
 export { ConfirmDialog } from "./confirm-dialog/confirm-dialog";
 export type { ConfirmDialogData } from "./confirm-dialog/confirm-dialog";
+export { Contact } from "./contact/contact";
 export { Footer } from "./footer/footer";
 export { Hero } from "./hero/hero";
 export { Navbar } from "./navbar/navbar";

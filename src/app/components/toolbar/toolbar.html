@@ -12,15 +12,7 @@
 
     <span class="flex-spacer"></span>
 
-    <button
-      mat-icon-button
-      type="button"
-      (click)="toggleTheme()"
-      [matTooltip]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
-      aria-label="Toggle theme">
-      <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
-    </button>
-
+    <!-- toggle sort -->
     <mat-button-toggle-group [(value)]="sortOrder" aria-label="Sort order">
       <mat-button-toggle
         value="desc"
@@ -36,6 +28,7 @@
       </mat-button-toggle>
     </mat-button-toggle-group>
 
+    <!-- toggle view -->
     <mat-button-toggle-group [(value)]="viewMode" aria-label="Select view mode">
       <mat-button-toggle
         value="grid"
@@ -50,5 +43,15 @@
         <mat-icon>table_rows</mat-icon>
       </mat-button-toggle>
     </mat-button-toggle-group>
+
+    <!-- toggle theme -->
+    <button
+      mat-icon-button
+      type="button"
+      (click)="toggleTheme()"
+      [matTooltip]="isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+      aria-label="Toggle theme">
+      <mat-icon>{{ isDark() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+    </button>
   </div>
 </div>
