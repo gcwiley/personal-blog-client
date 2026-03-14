@@ -16,5 +16,5 @@
   // sets the theme to material icon theme
   "workbench.iconTheme": "material-icon-theme",
   // lists of words considered correct
-  "cSpell.words": ["rowspan", "svgrepo"]
+  "cSpell.words": ["gregwiley", "rowspan", "svgrepo"]
 }

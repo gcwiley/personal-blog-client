@@ -6,7 +6,7 @@
       @for (zone of timeZones; track zone) {
       <mat-chip aria-label="Time in {{ zone.label }}">
         <strong>{{ zone.label }}</strong>
-        {{ currentTime() | date : 'HH:mm a z' : zone.offset }}
+        {{ currentTime() | date : 'HH:mm z' : zone.offset }}
       </mat-chip>
       }
     </mat-chip-set>

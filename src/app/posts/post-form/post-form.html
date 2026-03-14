@@ -1,3 +1,7 @@
+<h1 class="post-form-title">
+  {{ mode() === 'create' ? 'New Post' : 'Edit Post' }}
+</h1>
+
 <form
   [formGroup]="postForm"
   novalidate
@@ -16,7 +20,7 @@
               formControlName="title"
               title="Title"
               aria-describedby="title-error" />
-            @if (this.postForm.controls['title'].hasError('required')) {
+            @if (postForm.controls['title'].hasError('required')) {
             <mat-error id="title-error">Please enter a post title.</mat-error>
             }
           </mat-form-field>
@@ -101,17 +105,16 @@
     </mat-card-content>
 
     <mat-card-actions class="card-actions">
-      @if (this.mode() === 'create') {
-      <button mat-flat-button type="submit" [disabled]="!postForm.valid">
-        Create
-      </button>
-      } @else {
-      <button mat-flat-button type="submit" [disabled]="!postForm.valid">
-        Update
-      </button>
-      }
-      <button mat-flat-button type="button" (click)="postForm.reset()">
+      <button mat-stroked-button type="button" (click)="postForm.reset()">
         Clear
+      </button>
+      <span class="flex-spacer"></span>
+      <button
+        mat-flat-button
+        color="primary"
+        type="submit"
+        [disabled]="!postForm.valid">
+        {{ mode() === 'create' ? 'Create' : 'Update' }}
       </button>
     </mat-card-actions>
   </mat-card>

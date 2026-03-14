@@ -2,31 +2,33 @@
 
 .post-details-page-container {
   max-width: constants.$max-width;
-  margin: 2rem auto;          // matches home-page: top/bottom breathing room
-  padding: 0 1rem;            // matches home-page: screen edge clearance
+  margin: 2rem auto;
+  padding: 0 1rem;
   display: flex;
   flex-direction: row;
-  gap: 2rem;                  // replaces manual margins on child components
-  min-height: 100vh;
+  gap: 2rem;
+  min-height: calc(100vh - 8rem);
   isolation: isolate;
 }
 
 .back-button {
   flex-shrink: 0;
   align-self: flex-start;
-  margin-top: 3rem;           // aligns with article top margin
+  margin-top: 2rem;
 }
 
 .main-content {
   flex: 1 1 constants.$main-content-flex-basis;
-  min-width: 0;               // prevents long titles overflowing the flex container
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .side-content {
   flex: 0 0 constants.$side-content-flex-basis;
   max-width: constants.$side-content-max-width;
   position: sticky;
-  top: 4rem;                  // keeps sidebar visible while scrolling
+  top: 4rem;
   align-self: flex-start;
 }
 

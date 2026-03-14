@@ -1,7 +1,21 @@
 @if (post$ | async; as post) {
 <section class="post-description" aria-label="Post Description">
-  <h2>{{ post.date | date }}</h2>
-  <h1>{{ post.title }}</h1>
+  <div class="post-description-header">
+    <div>
+      <h2>{{ post.date | date }}</h2>
+      <h1>{{ post.title }}</h1>
+    </div>
+    <button
+      mat-icon-button
+      [matTooltip]="speechService.isSpeaking() ? 'Stop reading' : 'Read aloud'"
+      [attr.aria-label]="speechService.isSpeaking() ? 'Stop reading' : 'Read post aloud'"
+      (click)="speechService.toggle(post.title + '. ' + post.body)">
+      <mat-icon
+        >{{ speechService.isSpeaking() ? 'stop_circle' : 'volume_up'
+        }}</mat-icon
+      >
+    </button>
+  </div>
   <mat-divider></mat-divider>
   <p>{{ post.body }}</p>
 </section>

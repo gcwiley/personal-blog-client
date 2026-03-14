@@ -9,8 +9,12 @@
 
       <span class="flex-spacer" aria-hidden="true"></span>
 
-      <!-- user feedback - should open a dialog -->
-      <button mat-icon-button aria-label="Provide feedback">
+      <!-- user feedback - opens contact dialog -->
+      <button
+        mat-icon-button
+        aria-label="Provide feedback"
+        (click)="openFeedbackDialog()"
+        type="button">
         <mat-icon>feedback</mat-icon>
       </button>
 

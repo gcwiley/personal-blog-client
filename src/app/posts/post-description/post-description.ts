@@ -7,9 +7,15 @@ import { of, Observable, map, filter, switchMap, catchError } from 'rxjs';
 
 // angular material
 import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-// post service and interface
+// post and speech service
 import { PostService } from '../../services/post.service';
+import { SpeechService } from '../../services/speech.service';
+
+// post interface
 import { Post } from '../../types/post.interface';
 
 @Component({
@@ -17,12 +23,19 @@ import { Post } from '../../types/post.interface';
   templateUrl: './post-description.html',
   styleUrl: './post-description.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, RouterModule, MatDividerModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatDividerModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTooltipModule,
+  ],
 })
 export class PostDescription {
-  // inject dependencies
   private readonly route = inject(ActivatedRoute);
   private readonly postService = inject(PostService);
+  public readonly speechService = inject(SpeechService);
 
   public post$: Observable<Post | undefined> = this.route.paramMap.pipe(
     map((pm) => pm.get('id')),
@@ -32,8 +45,8 @@ export class PostDescription {
         catchError((error) => {
           console.error('Error fetching post:', error);
           return of(undefined);
-        })
-      )
-    )
+        }),
+      ),
+    ),
   );
 }

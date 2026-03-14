@@ -24,6 +24,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../types/post.interface';
 
+// pipe import
+import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
+
 @Component({
   selector: 'app-post-grid',
   templateUrl: './post-grid.html',
@@ -32,6 +35,7 @@ import { Post } from '../../types/post.interface';
   imports: [
     AsyncPipe,
     DatePipe,
+    TimeAgoPipe,
     RouterModule,
     MatCardModule,
     MatIconModule,
