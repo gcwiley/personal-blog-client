@@ -4,13 +4,56 @@
   margin-top: 4.5rem;
   margin-bottom: 2rem;
   border-radius: constants.$border-radius;
+  overflow: hidden;
 
   mat-card-header {
-    margin-bottom: 1rem;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(
+      135deg,
+      var(--mat-sys-primary, #3f51b5),
+      var(--mat-sys-tertiary, #7c4dff)
+    );
+    margin-bottom: 0;
+
+    mat-card-title {
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
   }
 
   mat-list {
-    padding-top: 0;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  mat-list-item {
+    border-radius: 8px;
+    margin: 0.25rem 0.5rem;
+    transition: background-color 150ms ease;
+
+    &:hover {
+      background-color: var(--mat-sys-surface-variant, rgba(63, 81, 181, 0.06));
+    }
+
+    mat-icon {
+      color: var(--mat-sys-primary, #3f51b5);
+    }
+
+    [matListItemTitle] {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--mat-sys-on-surface-variant, rgba(0, 0, 0, 0.55));
+    }
+
+    [matListItemLine] {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--mat-sys-on-surface, #1c1b1f);
+    }
   }
 }
 

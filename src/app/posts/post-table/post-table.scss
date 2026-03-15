@@ -151,8 +151,9 @@ tr.mat-mdc-row {
   }
 }
 
-// Paginator
+// paginator
 mat-paginator {
+  margin-top: 1rem;
   border-top: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
   border-radius: 0 0 8px 8px;
 }

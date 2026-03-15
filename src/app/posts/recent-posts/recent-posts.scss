@@ -2,8 +2,7 @@
 
 .recent-posts {
   width: 100%;
-  padding: 0;                              // mat-list has its own internal padding
-  // border: constants.$border-width constants.$border-style var(--mat-sys-outline-variant);
+  padding: 0;
   border-radius: constants.$border-radius;
   background-color: var(--mat-sys-primary-container);
   overflow: hidden;

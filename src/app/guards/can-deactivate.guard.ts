@@ -7,13 +7,13 @@ import { ConfirmDialog } from '../components/confirm-dialog/confirm-dialog';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
-  hasUnsavedChanges?: () => boolean; // ✅ optional — skip dialog if no changes
+  hasUnsavedChanges?: () => boolean; // optional — skip dialog if no changes
 }
 
 export const canDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> = (
   component: CanComponentDeactivate,
 ) => {
-  // ✅ if no unsaved changes, allow navigation immediately
+  // if no unsaved changes, allow navigation immediately
   if (component.hasUnsavedChanges && !component.hasUnsavedChanges()) {
     return true;
   }
@@ -22,7 +22,7 @@ export const canDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> = (
     return component.canDeactivate();
   }
 
-  // ✅ show confirmation dialog as fallback
+  // show confirmation dialog as fallback
   const dialog = inject(MatDialog);
   return dialog
     .open(ConfirmDialog, {

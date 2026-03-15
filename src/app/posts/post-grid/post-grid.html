@@ -24,6 +24,15 @@
   </mat-card>
   }
 </div>
+
+<mat-paginator
+  [length]="totalPosts()"
+  [pageSize]="pageSize()"
+  [pageSizeOptions]="[6, 12, 24]"
+  (page)="onPageChange($event)"
+  aria-label="Select page">
+</mat-paginator>
+
 } @else {
 <!-- Empty State -->
 <div class="empty-message">

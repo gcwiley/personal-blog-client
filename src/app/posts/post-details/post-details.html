@@ -7,19 +7,19 @@
     <mat-list role="list" aria-label="Post Details">
       <!-- date -->
       <mat-list-item lines="2" role="listitem">
-        <mat-icon matListItemIcon>calendar_month</mat-icon>
+        <mat-icon matListItemIcon color="primary">calendar_month</mat-icon>
         <span matListItemTitle>Date</span>
         <span matListItemLine>{{ post.date | date:'mediumDate' }}</span>
       </mat-list-item>
       <!-- author -->
       <mat-list-item lines="2" role="listitem">
-        <mat-icon matListItemIcon>person</mat-icon>
+        <mat-icon matListItemIcon color="primary">person</mat-icon>
         <span matListItemTitle>Author</span>
         <span matListItemLine>{{ post.author }}</span>
       </mat-list-item>
       <!-- category -->
       <mat-list-item lines="2" role="listitem">
-        <mat-icon matListItemIcon>category</mat-icon>
+        <mat-icon matListItemIcon color="primary">category</mat-icon>
         <span matListItemTitle>Category</span>
         <span matListItemLine>{{ post.category }}</span>
       </mat-list-item>

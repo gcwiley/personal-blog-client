@@ -5,8 +5,8 @@
 <mat-dialog-actions align="end">
   <button matButton [mat-dialog-close]="false">{{ data.cancelText }}</button>
   <button
-    matButton
-    [color]="data.color"
+    matButton="filled"
+    [class.warn-button]="data.color === 'warn'"
     [mat-dialog-close]="true"
     cdkFocusInitial>
     {{ data.confirmText }}

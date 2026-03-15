@@ -31,7 +31,6 @@
     margin-bottom: 4px;
   }
   .time-ago {
-    // margin-left: auto;
     color: var(--mat-sys-error); // Material's theme red
     font-size: 0.7rem;
     font-style: italic;
@@ -79,4 +78,11 @@
     width: 48px;
     opacity: 0.5;
   }
+}
+
+mat-paginator {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
+  border-radius: 8px;
+  background: var(--mat-sys-surface, #fff);
 }

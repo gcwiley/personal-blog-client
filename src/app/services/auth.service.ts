@@ -16,12 +16,16 @@ export class AuthService {
     map((user) => user?.email ?? null),
   );
 
+  // SIGN IN USER
   public signInUser(
     username: string,
     password: string,
   ): Observable<{ token: string; user: { email: string } }> {
     return this.http
-      .post<{ token: string; user: { email: string } }>('/api/auth/signin', { username, password })
+      .post<{
+        token: string;
+        user: { email: string };
+      }>('/api/auth/signin', { username, password })
       .pipe(
         tap((response) => {
           this.setToken(response.token);
@@ -31,6 +35,7 @@ export class AuthService {
       );
   }
 
+  // REGISTER NEW USER
   public registerNewUser(
     username: string,
     email: string,
@@ -48,6 +53,7 @@ export class AuthService {
       );
   }
 
+  // SIGN OUT USER
   public signOutUser(): void {
     this.removeToken();
     this.authStatus.next(false);
@@ -70,5 +76,20 @@ export class AuthService {
 
   public getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  private isTokenExpired(): boolean {
+    const token = this.getToken();
+    if (!token) return true;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.exp * 1000 < Date.now();
+    } catch {
+      return true; // malformed - treat as expired
+    }
+  }
+
+  private hasValidToken(): boolean {
+    return !!this.getToken() && !this.isTokenExpired();
   }
 }

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { catchError, of } from 'rxjs';
+import { RouterModule } from '@angular/router';
 
 // angular material
 import { MatListModule } from '@angular/material/list';
@@ -15,7 +16,7 @@ import { PostService } from '../../services/post.service';
   templateUrl: './recent-posts.html',
   styleUrl: './recent-posts.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe, MatListModule, MatIconModule, MatDividerModule],
+  imports: [AsyncPipe, MatListModule, MatIconModule, MatDividerModule, RouterModule],
 })
 export class RecentPosts {
   private readonly postService = inject(PostService);
