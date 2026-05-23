@@ -1,13 +1,18 @@
 import { inject } from '@angular/core';
 import { CanDeactivateFn } from '@angular/router';
-import { Observable } from 'rxjs';
+
+// rxjs
+import { Observable, map } from 'rxjs';
+
+// angular material
 import { MatDialog } from '@angular/material/dialog';
-import { map } from 'rxjs/operators';
+
+// confirm dialog
 import { ConfirmDialog } from '../components/confirm-dialog/confirm-dialog';
 
 export interface CanComponentDeactivate {
   canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
-  hasUnsavedChanges?: () => boolean; // optional — skip dialog if no changes
+  hasUnsavedChanges?: () => boolean;
 }
 
 export const canDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> = (

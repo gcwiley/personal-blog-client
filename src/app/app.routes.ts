@@ -46,11 +46,11 @@ export const routes: Routes = [
   // grouped post routes
   {
     path: 'posts',
+    canActivate: [authGuard], // protects all children
     children: [
       {
         path: '',
         title: 'Posts',
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/post-pages/post-display-page/post-display-page').then(
             (m) => m.PostDisplayPage,
@@ -59,7 +59,6 @@ export const routes: Routes = [
       {
         path: 'create',
         title: 'Create Post',
-        canActivate: [authGuard],
         canDeactivate: [canDeactivateGuard],
         loadComponent: () =>
           import('./pages/post-pages/post-form-page/post-form-page').then(
@@ -69,7 +68,6 @@ export const routes: Routes = [
       {
         path: ':id/edit',
         title: 'Edit Post',
-        canActivate: [authGuard],
         canDeactivate: [canDeactivateGuard],
         loadComponent: () =>
           import('./pages/post-pages/post-form-page/post-form-page').then(
@@ -79,7 +77,6 @@ export const routes: Routes = [
       {
         path: ':id',
         title: postTitleResolver,
-        canActivate: [authGuard],
         loadComponent: () =>
           import('./pages/post-pages/post-details-page/post-details-page').then(
             (m) => m.PostDetailsPage,

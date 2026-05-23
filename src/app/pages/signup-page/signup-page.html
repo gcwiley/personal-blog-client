@@ -84,7 +84,7 @@
             class="sign-in-button"
             type="submit"
             [disabled]="signUpForm.invalid || isLoading()">
-            <!-- ✅ loading spinner shown during request -->
+            <!-- loading spinner shown during request -->
             @if (isLoading()) {
             <mat-spinner diameter="20"></mat-spinner>
             } @else { Sign Up }

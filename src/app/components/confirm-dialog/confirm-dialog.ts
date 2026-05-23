@@ -9,7 +9,7 @@ export interface ConfirmDialogData {
    message: string;
    confirmText: string;
    cancelText: string;
-   color: 'primary' | 'accent' | 'warn';
+   isDestructive: boolean;
 }
 
 @Component({

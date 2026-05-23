@@ -15,7 +15,7 @@
             formControlName="username"
             placeholder="Enter your username"
             autocomplete="username" />
-          <!-- ✅ use signinForm.get() for type safety -->
+          <!-- use signinForm.get() for type safety -->
           @if (signinForm.get('username')?.hasError('required') &&
           signinForm.get('username')?.touched) {
           <mat-error aria-live="polite">Please enter your username.</mat-error>
@@ -41,7 +41,7 @@
               {{ showPassword() ? 'visibility_off' : 'visibility' }}
             </mat-icon>
           </button>
-          <!-- ✅ consistent use of signinForm.get() + touched guard -->
+          <!-- consistent use of signinForm.get() + touched guard -->
           @if (signinForm.get('password')?.hasError('required') &&
           signinForm.get('password')?.touched) {
           <mat-error aria-live="polite">Please enter your password.</mat-error>
@@ -65,7 +65,7 @@
             class="sign-in-button"
             type="submit"
             [disabled]="signinForm.invalid || isLoading()">
-            <!-- ✅ loading spinner shown during request -->
+            <!-- loading spinner shown during request -->
             @if (isLoading()) {
             <mat-spinner diameter="20"></mat-spinner>
             } @else { Sign In }
@@ -74,7 +74,7 @@
       </form>
     </mat-card-content>
 
-    <!-- ✅ new account link -->
+    <!-- new account link -->
     <div class="signin-footer-link">
       <span>Don't have an account? </span>
       <a routerLink="/signup">Create one here.</a>

@@ -51,7 +51,7 @@ export class PostGrid implements OnInit {
   public ngOnInit(): void {
     this.posts$ = this.pageParams$.pipe(
       switchMap(({ page, pageSize }) =>
-        this.postService.getPostsPaginated(page, pageSize).pipe(
+        this.postService.getPosts(page, pageSize).pipe(
           takeUntilDestroyed(this.destroyRef),
           map((res) => {
             this.totalPosts.set(res.total);
@@ -68,7 +68,7 @@ export class PostGrid implements OnInit {
   }
 
   public onPageChange(event: PageEvent): void {
-    this.hasError.set(false); // reset before next request
+    this.hasError.set(false);
     this.pageSize.set(event.pageSize);
     this.pageParams$.next({ page: event.pageIndex + 1, pageSize: event.pageSize });
   }

@@ -99,8 +99,8 @@ export class PostTable implements OnInit, AfterViewInit {
       .getPosts()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (posts) => {
-          this.dataSource.data = posts;
+        next: (response) => {
+          this.dataSource.data = response.data;
           this.isLoadingResults.set(false);
         },
         error: (error) => {

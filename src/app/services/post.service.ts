@@ -4,7 +4,15 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { catchError, Observable, of, throwError, map, retry } from 'rxjs';
+import {
+  catchError,
+  Observable,
+  of,
+  throwError,
+  map,
+  retry,
+  timer,
+} from 'rxjs';
 
 // environment
 import { environment } from '../../environments/environment';
@@ -23,32 +31,32 @@ export class PostService {
 
   private readonly DEFAULT_RETRY = { count: 1, delay: 1000 };
 
-  // GET: - GET ALL POSTS
-  public getPosts(): Observable<Post[]> {
-    return this.http.get<ApiResponse<Post[]>>(this.API_URL).pipe(
-      retry(this.DEFAULT_RETRY),
-      map((res) => res.data),
-      catchError((error) => this.handleError(error)),
-    );
-  }
-
-  // GET: - GET POSTS WITH PAGINATION
-  public getPostsPaginated(
+  // GET: - GET ALL POSTS WITH PAGINATION
+  public getPosts(
     page = 1,
     limit = 10,
     sort = 'createdAt',
     order: 'asc' | 'desc' = 'desc',
   ): Observable<PaginatedResponse<Post>> {
     const params = new HttpParams()
-      .set('page', page.toString())
-      .set('limit', limit.toString())
+      .set('page', page)
+      .set('limit', limit)
       .set('sort', sort)
       .set('order', order);
 
     return this.http
       .get<PaginatedResponse<Post>>(this.API_URL, { params })
       .pipe(
-        retry(this.DEFAULT_RETRY),
+        retry({
+          count: 1,
+          delay: (error: HttpErrorResponse) => {
+            // only retry on network errors or 5xx
+            if (error.status === 0 || error.status >= 500) {
+              return timer(1000);
+            }
+            return throwError(() => error);
+          },
+        }),
         catchError((error) => this.handleError(error)),
       );
   }
@@ -63,18 +71,20 @@ export class PostService {
     );
   }
 
-  // GET - SEARCH POSTS
+  // GET - SEARCH ALL POSTS
   public searchPosts(term: string): Observable<Post[]> {
     if (!term.trim()) {
       // if no search term, return an empty post array
       return of([]);
     }
     const params = new HttpParams().set('query', term);
-    return this.http.get<ApiResponse<Post[]>>(this.API_URL, { params }).pipe(
-      retry(this.DEFAULT_RETRY),
-      map((res) => res.data),
-      catchError((error) => this.handleError(error)),
-    );
+    return this.http
+      .get<ApiResponse<Post[]>>(`${this.API_URL}/search`, { params })
+      .pipe(
+        retry(this.DEFAULT_RETRY),
+        map((res) => res.data),
+        catchError((error) => this.handleError(error)),
+      );
   }
 
   // GET: - GET POST COUNT
@@ -97,7 +107,7 @@ export class PostService {
 
   // SAVE METHODS
 
-  // POST: - NEW POST
+  // POST: - CREATE NEW POST
   public addPost(newPost: PostInput): Observable<Post> {
     return this.http.post<ApiResponse<Post>>(this.API_URL, newPost).pipe(
       map((res) => res.data),

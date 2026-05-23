@@ -99,7 +99,7 @@ export class SignupPage {
           return of(null);
         }),
         finalize(() => this.isLoading.set(false)),
-        takeUntilDestroyed(this.destroyRef), // ✅ prevents memory leak
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe((response) => {
         if (response) {

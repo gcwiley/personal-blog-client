@@ -5,7 +5,8 @@ import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'jwt_token';
-  private authStatus = new BehaviorSubject<boolean>(this.hasToken());
+
+  private readonly authStatus = new BehaviorSubject<boolean>(this.hasToken());
 
   private readonly http = inject(HttpClient);
 
