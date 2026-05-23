@@ -46,12 +46,12 @@ export class Toolbar {
   public sortField = model<PostSortField>('createdAt');
   public sortOrder = model<SortDirection>('desc');
 
-  // get post count
+  // get post count as a signal, with error handling to return null on failure
   public readonly postCount$ = this.postService.getPostsCount().pipe(
     catchError(() => of(null)), // null signals a fetch failure gracefully
   );
 
-  // toggle theme
+  // toggle theme between light and dark
   public toggleTheme(): void {
     this.themeService.toggleTheme()
   }

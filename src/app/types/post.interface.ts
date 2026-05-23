@@ -1,4 +1,4 @@
-// ISO 8601 date/time string
+// ISO 8601 date/time string type for consistent date handling across the app
 export type ISODateString = string;
 
 // define the post interface
