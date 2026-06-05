@@ -37,7 +37,7 @@ export class PostDeleteDirective {
   private readonly snackBar = inject(MatSnackBar);
   private readonly destroyRef = inject(DestroyRef);
 
-  private isDeleting = signal(false);
+  private readonly isDeleting = signal(false);
 
   @HostListener('click')
   public onClick(): void {

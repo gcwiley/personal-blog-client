@@ -7,7 +7,6 @@ A full-stack personal blog application built with **Angular** and **Node.js/Expr
 ## Tech Stack
 
 | Layer | Technology |
-
 |---|---|
 | Frontend | Angular 21, Angular Material, TypeScript |
 | Backend | Node.js, Express 5, Sequelize ORM |
