@@ -4,4 +4,5 @@ export { PostDetails } from './post-details/post-details';
 export { PostForm } from './post-form/post-form';
 export { PostGrid } from './post-grid/post-grid';
 export { PostTable } from './post-table/post-table';
+export { PostTags } from './post-tags/post-tags';
 export { RecentPosts } from './recent-posts/recent-posts';

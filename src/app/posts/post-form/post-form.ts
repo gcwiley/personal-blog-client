@@ -68,7 +68,7 @@ export class PostForm implements OnInit {
     body: ['', Validators.required],
     category: ['', Validators.required],
     favorite: [false, Validators.required],
-    date: [null as Date | null, Validators.required],
+    publishedDate: [null as Date | null, Validators.required],
   });
 
   public ngOnInit(): void {
@@ -90,7 +90,7 @@ export class PostForm implements OnInit {
         if (post) {
           this.postForm.patchValue({
             ...post,
-            date: post.date ? new Date(post.date) : null,
+            publishedDate: post.publishedDate ? new Date(post.publishedDate) : null,
           });
         }
       });

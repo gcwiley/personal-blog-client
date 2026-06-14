@@ -66,18 +66,18 @@
         <div class="col">
           <!-- date -->
           <mat-form-field class="full-width" appearance="outline">
-            <mat-label>Date</mat-label>
+            <mat-label>Published Date</mat-label>
             <input
               matInput
               [matDatepicker]="picker"
-              formControlName="date"
-              placeholder="Date" />
+              formControlName="publishedDate"
+              placeholder="Publication Date" />
             <mat-datepicker-toggle
               matSuffix
               [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            @if (this.postForm.controls['date'].hasError('required')) {
-            <mat-error>Please select a date.</mat-error>
+            @if (this.postForm.controls['publishedDate'].hasError('required')) {
+            <mat-error>Please select a publication date.</mat-error>
             }
           </mat-form-field>
         </div>

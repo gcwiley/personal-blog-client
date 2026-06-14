@@ -4,11 +4,11 @@
   <mat-card appearance="outlined" class="post-card">
     <mat-card-header>
       <mat-card-subtitle>
-        <span>{{ post.date | date:'mediumDate' }} • {{ post.category }}</span>
+        <span>{{ post.publishedDate | date:'mediumDate' }} • {{ post.category }}</span>
       </mat-card-subtitle>
       <mat-card-subtitle>
-        @if (post.date) {
-        <span class="time-ago">{{ post.date | timeAgo }}</span>
+        @if (post.publishedDate) {
+        <span class="time-ago">{{ post.publishedDate | timeAgo }}</span>
         }
       </mat-card-subtitle>
       <mat-card-title>{{ post.title }}</mat-card-title>

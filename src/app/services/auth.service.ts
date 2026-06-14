@@ -2,11 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 
+// utils for checking token expiration and decoding JWT payload
+import { isTokenExpired } from '../utils/jwt.utils';
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  private readonly TOKEN_KEY = 'jwt_token';
+  private readonly TOKEN_KEY = 'my_blog_jwt_token';
 
-  private readonly authStatus = new BehaviorSubject<boolean>(this.hasToken());
+  private readonly authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
 
   private readonly http = inject(HttpClient);
 
@@ -81,13 +84,7 @@ export class AuthService {
 
   private isTokenExpired(): boolean {
     const token = this.getToken();
-    if (!token) return true;
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.exp * 1000 < Date.now();
-    } catch {
-      return true; // malformed - treat as expired
-    }
+    return !token || isTokenExpired(token);
   }
 
   private hasValidToken(): boolean {

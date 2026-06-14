@@ -42,7 +42,7 @@ export class CustomConfirmDialogService {
             'Are you sure you want to delete this item? This action cannot be undone.',
           confirmText: 'Delete',
           cancelText: 'Cancel',
-          color: 'warn', // red button for dangerous actions
+          isDestructive: true,
         };
 
       case CustomConfirmDialog.UnsavedChanges:
@@ -51,7 +51,7 @@ export class CustomConfirmDialogService {
           message: 'You have unsaved changes. Are you sure you want to leave?',
           confirmText: 'Leave',
           cancelText: 'Stay',
-          color: 'accent',
+          isDestructive: true,
         };
 
       case CustomConfirmDialog.ConfirmAction:
@@ -61,7 +61,7 @@ export class CustomConfirmDialogService {
           message: 'Are you sure you want to proceed?',
           confirmText: 'Yes',
           cancelText: 'No',
-          color: 'primary',
+          isDestructive: true,
         };
     }
   }
