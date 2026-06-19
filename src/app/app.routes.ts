@@ -27,21 +27,21 @@ export const routes: Routes = [
     title: 'My Profile',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/user-profile-page/profile-page').then((m) => m.ProfilePage),
+      import('./pages/user-profile-page/user-profile-page').then((m) => m.UserProfilePage),
   },
   // sign in page
   {
     path: 'signin',
     title: 'Sign In',
     loadComponent: () =>
-      import('./pages/signin-page/signin-page').then((m) => m.SigninPage),
+      import('./pages/signin-page/signin-page').then((m) => m.SignInPage),
   },
   // sign up page
   {
     path: 'signup',
     title: 'Create New Account',
     loadComponent: () =>
-      import('./pages/signup-page/signup-page').then((m) => m.SignupPage),
+      import('./pages/signup-page/signup-page').then((m) => m.SignUpPage),
   },
   // grouped post routes
   {
