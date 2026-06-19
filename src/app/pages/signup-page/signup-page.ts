@@ -52,7 +52,7 @@ const ERROR_MESSAGES = {
     MatProgressSpinnerModule,
   ],
 })
-export class SignupPage {
+export class SignUpPage {
   // signals work correctly with OnPush
   public readonly isLoading = signal(false);
   public readonly showPassword = signal(false);

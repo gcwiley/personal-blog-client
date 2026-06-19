@@ -8,7 +8,7 @@ export interface Post {
   author: string;
   body: string;
   category: string;
-  favorite: boolean;
+  isFavorite: boolean;
   publishedDate: ISODateString | null;
   readonly createdAt: ISODateString;
   readonly updatedAt: ISODateString;

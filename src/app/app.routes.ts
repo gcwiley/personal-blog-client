@@ -27,7 +27,7 @@ export const routes: Routes = [
     title: 'My Profile',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/profile-page/profile-page').then((m) => m.ProfilePage),
+      import('./pages/user-profile-page/profile-page').then((m) => m.ProfilePage),
   },
   // sign in page
   {

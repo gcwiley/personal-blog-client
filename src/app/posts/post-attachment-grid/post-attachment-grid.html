@@ -1,0 +1,47 @@
+@if (posts$ | async; as postList) { @if (postList.length > 0) {
+<div class="post-grid-container">
+  @for (post of postList; track post.id) {
+  <mat-card appearance="outlined" class="post-card">
+    <mat-card-header>
+      <mat-card-subtitle>
+        <span>{{ post.publishedDate | date:'mediumDate' }} • {{ post.category }}</span>
+      </mat-card-subtitle>
+      <mat-card-subtitle>
+        @if (post.publishedDate) {
+        <span class="time-ago">{{ post.publishedDate | timeAgo }}</span>
+        }
+      </mat-card-subtitle>
+      <mat-card-title>{{ post.title }}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p class="post-excerpt">{{ post.body }}</p>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a matButton routerLink="/posts/{{ post.id }}">Read More</a>
+    </mat-card-actions>
+  </mat-card>
+  }
+</div>
+
+<mat-paginator
+  [length]="totalPosts()"
+  [pageSize]="pageSize()"
+  [pageSizeOptions]="[6, 12, 24]"
+  (page)="onPageChange($event)"
+  aria-label="Select page">
+</mat-paginator>
+
+} @else {
+<!-- Empty State -->
+<div class="empty-message">
+  <mat-icon>sentiment_dissatisfied</mat-icon>
+  <p>No posts found.</p>
+</div>
+} } @else {
+<!-- Loading State -->
+<div class="spinner-container">
+  <mat-spinner diameter="50"></mat-spinner>
+</div>
+}

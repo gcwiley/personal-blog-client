@@ -9,8 +9,6 @@ import {
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterModule } from '@angular/router';
-
-// rxjs
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { catchError, startWith, switchMap, map } from 'rxjs/operators';
 
@@ -27,12 +25,11 @@ import { Post } from '../../types/post.interface';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
 
 @Component({
-  selector: 'app-post-grid',
-  templateUrl: './post-grid.html',
-  styleUrl: './post-grid.scss',
+  selector: 'app-post-attachment-grid',
+  templateUrl: './post-attachment-grid.html',
+  styleUrl: './post-attachment-grid.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    AsyncPipe,
+  imports: [AsyncPipe,
     DatePipe,
     TimeAgoPipe,
     RouterModule,
@@ -40,10 +37,9 @@ import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
     MatIconModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule,
-  ],
+    MatPaginatorModule,],
 })
-export class PostGrid implements OnInit {
+export class PostAttachmentGrid implements OnInit {
   private readonly postService = inject(PostService);
   private readonly destroyRef = inject(DestroyRef);
 

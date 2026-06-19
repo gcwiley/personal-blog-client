@@ -12,9 +12,9 @@ import { Navbar, Footer, Clock } from '../../components';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
-  selector: 'app-profile-page',
-  templateUrl: './profile-page.html',
-  styleUrl: './profile-page.scss',
+  selector: 'app-user-profile-page',
+  templateUrl: './user-profile-page.html',
+  styleUrl: './user-profile-page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     Navbar,
@@ -27,7 +27,7 @@ import { AuthService } from '../../services/auth.service';
     MatListModule,
   ],
 })
-export class ProfilePage {
+export class UserProfilePage {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
 

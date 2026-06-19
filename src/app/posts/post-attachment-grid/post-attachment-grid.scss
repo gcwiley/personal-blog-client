@@ -1,0 +1,88 @@
+.post-grid-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding: 16px 0;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 8px 4px;
+
+  mat-card-subtitle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+    color: var(--mat-sys-primary);
+    margin-bottom: 6px;
+  }
+
+  mat-card-title {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 4px;
+  }
+  .time-ago {
+    color: var(--mat-sys-error); // Material's theme red
+    font-size: 0.7rem;
+    font-style: italic;
+    white-space: nowrap;
+  }
+}
+
+.post-excerpt {
+  color: var(--mat-sys-on-surface-variant);
+  line-height: 1.75;
+  margin: 8px 0 0;
+  font-size: 0.95rem;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// during loading of posts
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  width: 100%;
+}
+
+// when no posts are found
+.empty-message {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 40vh;
+  width: 100%;
+  text-align: center;
+  color: var(--mat-sys-on-surface-variant);
+  gap: 8px;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    opacity: 0.5;
+  }
+}
+
+mat-paginator {
+  margin-top: 1.5rem;
+  border-top: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
+  border-radius: 8px;
+  background: var(--mat-sys-surface, #fff);
+}
