@@ -2,7 +2,7 @@ import { ResolveFn } from '@angular/router';
 import { inject } from '@angular/core';
 import { map, of, catchError } from 'rxjs';
 
-// import post service
+// post service
 import { PostService } from '../services/post.service';
 
 export const postTitleResolver: ResolveFn<string> = (route) => {

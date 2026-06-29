@@ -4,6 +4,8 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
+
+// rxjs
 import {
   catchError,
   Observable,
@@ -29,7 +31,16 @@ export class PostService {
   private readonly API_URL = `${environment.apiUrl}/posts`;
   private readonly http = inject(HttpClient);
 
-  private readonly DEFAULT_RETRY = { count: 1, delay: 1000 };
+  // DEFAULT RETRY COUNT
+  private readonly smartRetry = {
+    count: 1,
+    delay: (error: HttpErrorResponse) => {
+      if (error.status === 0 || error.status >= 500) {
+        return timer(1000);
+      }
+      return throwError(() => error);
+    },
+  };
 
   // GET: - GET ALL POSTS WITH PAGINATION
   public getPosts(
@@ -47,16 +58,7 @@ export class PostService {
     return this.http
       .get<PaginatedResponse<Post>>(this.API_URL, { params })
       .pipe(
-        retry({
-          count: 1,
-          delay: (error: HttpErrorResponse) => {
-            // only retry on network errors or 5xx
-            if (error.status === 0 || error.status >= 500) {
-              return timer(1000);
-            }
-            return throwError(() => error);
-          },
-        }),
+        retry(this.smartRetry),
         catchError((error) => this.handleError(error)),
       );
   }
@@ -65,7 +67,7 @@ export class PostService {
   public getPostById(id: string): Observable<Post> {
     const url = `${this.API_URL}/${id}`;
     return this.http.get<ApiResponse<Post>>(url).pipe(
-      retry(this.DEFAULT_RETRY),
+      retry(this.smartRetry),
       map((res) => res.data),
       catchError((error) => this.handleError(error)),
     );
@@ -81,7 +83,7 @@ export class PostService {
     return this.http
       .get<ApiResponse<Post[]>>(`${this.API_URL}/search`, { params })
       .pipe(
-        retry(this.DEFAULT_RETRY),
+        retry(this.smartRetry),
         map((res) => res.data),
         catchError((error) => this.handleError(error)),
       );
@@ -90,7 +92,7 @@ export class PostService {
   // GET: - GET POST COUNT
   public getPostsCount(): Observable<number> {
     return this.http.get<ApiResponse<number>>(`${this.API_URL}/count`).pipe(
-      retry(this.DEFAULT_RETRY),
+      retry(this.smartRetry),
       map((res) => res.data),
       catchError((error) => this.handleError(error)),
     );
@@ -99,7 +101,7 @@ export class PostService {
   // GET: GET RECENTLY CREATED POSTS
   public getRecentlyCreatedPosts(): Observable<Post[]> {
     return this.http.get<ApiResponse<Post[]>>(`${this.API_URL}/recent`).pipe(
-      retry(this.DEFAULT_RETRY),
+      retry(this.smartRetry),
       map((res) => res.data),
       catchError((error) => this.handleError(error)),
     );
@@ -125,7 +127,7 @@ export class PostService {
   }
 
   // PATCH: - UPDATE POST BY ID
-  public updatePostById(id: string, body: Partial<Post>): Observable<Post> {
+  public updatePostById(id: string, body: Partial<PostInput>): Observable<Post> {
     const url = `${this.API_URL}/${id}`;
     return this.http.patch<ApiResponse<Post>>(url, body).pipe(
       map((res) => res.data),

@@ -3,19 +3,32 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 
 // utils for checking token expiration and decoding JWT payload
-import { isTokenExpired } from '../utils/jwt.utils';
+import { decodeJwt, isTokenExpired } from '../utils/jwt.utils';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'my_blog_jwt_token';
 
-  private readonly authStatus = new BehaviorSubject<boolean>(this.hasValidToken());
+  private readonly authStatus = new BehaviorSubject<boolean>(
+    this.hasValidToken(),
+  );
 
   private readonly http = inject(HttpClient);
 
+  // BehaviorSubject to hold the current user information
   private readonly currentUser = new BehaviorSubject<{ email: string } | null>(
-    null,
+    this.getUserFromToken(),
   );
+
+  private getUserFromToken(): { email: string } | null {
+    const token = this.getToken();
+    if (!token || isTokenExpired(token)) return null;
+    const payload = decodeJwt(token);
+    const email = payload?.['email'];
+    return typeof email === 'string' ? { email } : null;
+  }
+
+  // Observable to expose the current user information
   public readonly userEmail$ = this.currentUser.pipe(
     map((user) => user?.email ?? null),
   );
@@ -64,29 +77,31 @@ export class AuthService {
     this.currentUser.next(null);
   }
 
-  isAuthenticated$ = this.authStatus.asObservable();
+  // Observable to expose the authentication status
+  readonly isAuthenticated$ = this.authStatus.asObservable();
 
+  // Store the token in local storage
   private setToken(token: string) {
     localStorage.setItem(this.TOKEN_KEY, token);
   }
 
+  // Remove the token from local storage
   private removeToken() {
     localStorage.removeItem(this.TOKEN_KEY);
   }
 
-  private hasToken(): boolean {
-    return !!localStorage.getItem(this.TOKEN_KEY);
-  }
-
+  // Retrieve the token from local storage
   public getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
+  // Check if the token is expired
   private isTokenExpired(): boolean {
     const token = this.getToken();
     return !token || isTokenExpired(token);
   }
 
+  // Check if the token is valid (exists and not expired)
   private hasValidToken(): boolean {
     return !!this.getToken() && !this.isTokenExpired();
   }

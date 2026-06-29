@@ -4,13 +4,29 @@ import { ISODateString } from '../types/post.interface';
 @Pipe({
   name: 'timeAgo',
   standalone: true,
+  pure: true, 
 })
 export class TimeAgoPipe implements PipeTransform {
   transform(value: ISODateString | null): string {
     if (!value) return '';
 
-    const seconds = Math.floor((Date.now() - new Date(value).getTime()) / 1000);
+    const date = new Date(value);
+    const timeMs = date.getTime();
 
+    // 1. handle invalid date values to prevent "NaN years ago"
+    if (isNaN(timeMs)) {
+      return '';
+    }
+
+    const now = Date.now();
+    const elapsedMs = now - timeMs;
+
+    // 2. handle future dates (e.g. due to client/server clock drift)
+    if (elapsedMs < 0) {
+      return 'just now'; // or 'in the future' if expecting true future dates
+    }
+
+    const seconds = Math.floor(elapsedMs / 1000);
     if (seconds < 60) return 'just now';
 
     const minutes = Math.floor(seconds / 60);

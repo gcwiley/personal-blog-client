@@ -1,9 +1,12 @@
 import { Injectable, inject } from '@angular/core';
+
+// rxjs
 import { Observable } from 'rxjs';
 
 // angular material
 import { MatDialog } from '@angular/material/dialog';
 
+// confirm components
 import { ConfirmDialog, ConfirmDialogData } from '../components';
 
 // define the types of dialogs available

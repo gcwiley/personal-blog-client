@@ -61,7 +61,7 @@ export class PostForm implements OnInit {
   private readonly postService = inject(PostService);
   private readonly snackBar = inject(MatSnackBar);
 
-  // create the post form
+  // post form
   postForm = this.formBuilder.group({
     title: ['', Validators.required],
     author: ['', Validators.required],

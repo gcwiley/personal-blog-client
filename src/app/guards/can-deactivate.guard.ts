@@ -34,8 +34,9 @@ export const canDeactivateGuard: CanDeactivateFn<CanComponentDeactivate> = (
       data: {
         title: 'Unsaved Changes',
         message: 'You have unsaved changes. Are you sure you want to leave?',
-        confirmLabel: 'Leave',
-        cancelLabel: 'Stay',
+        confirmText: 'Leave',
+        cancelText: 'Stay',
+        isDestructive: true,
       },
     })
     .afterClosed()
