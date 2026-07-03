@@ -4,12 +4,17 @@ import { Router } from '@angular/router';
 // angular material
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTabsModule } from '@angular/material/tabs';
 
 // shared components
 import { Navbar, Clock, Footer } from '../../../components';
 
 // post components
-import { PostDescription, PostDetails } from '../../../posts';
+import {
+  PostDescription,
+  PostDetails,
+  PostAttachmentGrid,
+} from '../../../posts';
 
 @Component({
   selector: 'app-post-details-page',
@@ -22,8 +27,10 @@ import { PostDescription, PostDetails } from '../../../posts';
     Footer,
     PostDescription,
     PostDetails,
+    PostAttachmentGrid,
     MatButtonModule,
     MatIconModule,
+    MatTabsModule,
   ],
 })
 export class PostDetailsPage {

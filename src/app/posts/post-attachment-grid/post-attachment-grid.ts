@@ -1,77 +1,148 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  inject,
+  ElementRef,
   OnInit,
+  ViewChild,
+  inject,
   signal,
-  DestroyRef,
 } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterModule } from '@angular/router';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { catchError, startWith, switchMap, map } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { Observable, BehaviorSubject, of } from 'rxjs';
+import { catchError, filter, map, startWith, switchMap } from 'rxjs/operators';
+import { first, finalize } from 'rxjs';
 
 // angular material
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-// post service, interface, and pipes
-import { PostService } from '../../services/post.service';
-import { Post } from '../../types/post.interface';
-import { TimeAgoPipe } from '../../pipes/time-ago.pipe';
+// services, types, and constants
+import { AttachmentService } from '../../services/attachment.service';
+import {
+  CustomConfirmDialogService,
+  CustomConfirmDialog,
+} from '../../services/custom-confirm-dialog.service';
+import { Attachment } from '../../types/post.interface';
+import { SNACK_BAR_DURATION_MS } from '../../constants/ui.constants';
 
 @Component({
   selector: 'app-post-attachment-grid',
   templateUrl: './post-attachment-grid.html',
   styleUrl: './post-attachment-grid.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [AsyncPipe,
+  imports: [
+    AsyncPipe,
     DatePipe,
-    TimeAgoPipe,
-    RouterModule,
     MatCardModule,
     MatIconModule,
     MatButtonModule,
     MatProgressSpinnerModule,
-    MatPaginatorModule,],
+    MatTooltipModule,
+  ],
 })
 export class PostAttachmentGrid implements OnInit {
-  private readonly postService = inject(PostService);
-  private readonly destroyRef = inject(DestroyRef);
+  @ViewChild('fileInput') fileInputRef!: ElementRef<HTMLInputElement>;
 
-  private readonly pageParams$ = new BehaviorSubject({ page: 1, pageSize: 6 });
+  private readonly route = inject(ActivatedRoute);
+  private readonly attachmentService = inject(AttachmentService);
+  private readonly confirmDialogService = inject(CustomConfirmDialogService);
+  private readonly snackBar = inject(MatSnackBar);
 
-  public posts$!: Observable<Post[] | null>;
+  private postId = '';
+  private readonly refresh$ = new BehaviorSubject<void>(undefined);
+
+  public attachments$!: Observable<Attachment[] | null>;
   public hasError = signal(false);
-  public totalPosts = signal(0);
-  public pageSize = signal(6);
+  public isUploading = signal(false);
 
   public ngOnInit(): void {
-    this.posts$ = this.pageParams$.pipe(
-      switchMap(({ page, pageSize }) =>
-        this.postService.getPosts(page, pageSize).pipe(
-          takeUntilDestroyed(this.destroyRef),
-          map((res) => {
-            this.totalPosts.set(res.total);
-            return res.data;
+    this.attachments$ = this.route.paramMap.pipe(
+      map((pm) => pm.get('id')),
+      filter((id): id is string => !!id),
+      switchMap((id) => {
+        this.postId = id;
+        return this.refresh$.pipe(
+          switchMap(() => {
+            this.hasError.set(false);
+            return this.attachmentService.getAttachmentsByPostId(id).pipe(
+              startWith(null),
+              catchError(() => {
+                this.hasError.set(true);
+                return of([]);
+              }),
+            );
           }),
-          startWith(null),
-          catchError(() => {
-            this.hasError.set(true);
-            return of([]);
-          }),
-        ),
-      ),
+        );
+      }),
     );
   }
 
-  public onPageChange(event: PageEvent): void {
-    this.hasError.set(false);
-    this.pageSize.set(event.pageSize);
-    this.pageParams$.next({ page: event.pageIndex + 1, pageSize: event.pageSize });
+  public triggerFileInput(): void {
+    this.fileInputRef.nativeElement.click();
+  }
+
+  public onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) return;
+    input.value = ''; // reset so the same file can be re-selected
+
+    this.isUploading.set(true);
+    this.attachmentService
+      .addAttachment(this.postId, file)
+      .pipe(
+        first(),
+        finalize(() => this.isUploading.set(false)),
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Attachment uploaded successfully.', 'Close', {
+            duration: SNACK_BAR_DURATION_MS,
+          });
+          this.refresh$.next();
+        },
+        error: () => {
+          this.snackBar.open('Failed to upload attachment.', 'Close', {
+            duration: SNACK_BAR_DURATION_MS,
+          });
+        },
+      });
+  }
+
+  public onDeleteAttachment(attachment: Attachment): void {
+    this.confirmDialogService
+      .openCustomConfirmDialog(CustomConfirmDialog.Delete)
+      .pipe(first())
+      .subscribe((confirmed) => {
+        if (!confirmed) return;
+        this.attachmentService
+          .deleteAttachment(this.postId, attachment.id)
+          .pipe(first())
+          .subscribe({
+            next: () => {
+              this.snackBar.open('Attachment deleted.', 'Close', {
+                duration: SNACK_BAR_DURATION_MS,
+              });
+              this.refresh$.next();
+            },
+            error: () => {
+              this.snackBar.open('Failed to delete attachment.', 'Close', {
+                duration: SNACK_BAR_DURATION_MS,
+              });
+            },
+          });
+      });
+  }
+
+  public formatFileSize(bytes: string): string {
+    const size = parseInt(bytes, 10);
+    if (size < 1024) return `${size} B`;
+    if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+    return `${(size / (1024 * 1024)).toFixed(1)} MB`;
   }
 }

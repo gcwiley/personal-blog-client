@@ -23,7 +23,7 @@ export class TimeAgoPipe implements PipeTransform {
 
     // 2. handle future dates (e.g. due to client/server clock drift)
     if (elapsedMs < 0) {
-      return 'just now'; // or 'in the future' if expecting true future dates
+      return 'just now';
     }
 
     const seconds = Math.floor(elapsedMs / 1000);

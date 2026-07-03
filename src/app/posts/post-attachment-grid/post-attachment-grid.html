@@ -1,47 +1,66 @@
-@if (posts$ | async; as postList) { @if (postList.length > 0) {
-<div class="post-grid-container">
-  @for (post of postList; track post.id) {
-  <mat-card appearance="outlined" class="post-card">
-    <mat-card-header>
-      <mat-card-subtitle>
-        <span>{{ post.publishedDate | date:'mediumDate' }} • {{ post.category }}</span>
-      </mat-card-subtitle>
-      <mat-card-subtitle>
-        @if (post.publishedDate) {
-        <span class="time-ago">{{ post.publishedDate | timeAgo }}</span>
-        }
-      </mat-card-subtitle>
-      <mat-card-title>{{ post.title }}</mat-card-title>
-    </mat-card-header>
+<div class="attachment-grid-header">
+  <button
+    mat-stroked-button
+    [disabled]="isUploading()"
+    (click)="triggerFileInput()"
+    aria-label="Add image attachment">
+    @if (isUploading()) {
+    <mat-spinner diameter="18"></mat-spinner>
+    } @else {
+    <mat-icon>attach_file</mat-icon>
+    } Add Attachment
+  </button>
+  <input
+    #fileInput
+    type="file"
+    accept="image/*"
+    class="hidden-file-input"
+    (change)="onFileSelected($event)"
+    aria-hidden="true" />
+</div>
 
+@if (attachments$ | async; as attachments) { @if (hasError()) {
+<div class="status-state">
+  <mat-icon color="warn">error_outline</mat-icon>
+  <p>Failed to load attachments.</p>
+</div>
+} @else if (attachments.length > 0) {
+<div class="attachment-grid">
+  @for (attachment of attachments; track attachment.id) {
+  <mat-card class="attachment-card" appearance="outlined">
+    <img
+      mat-card-image
+      [src]="attachment.filePath"
+      [alt]="attachment.originalName"
+      class="attachment-image" />
     <mat-card-content>
-      <p class="post-excerpt">{{ post.body }}</p>
+      <p class="attachment-name" [matTooltip]="attachment.originalName">
+        {{ attachment.originalName }}
+      </p>
+      <p class="attachment-meta">
+        {{ formatFileSize(attachment.fileSize) }} &bull; {{ attachment.createdAt
+        | date:'mediumDate' }}
+      </p>
     </mat-card-content>
-
     <mat-card-actions align="end">
-      <a matButton routerLink="/posts/{{ post.id }}">Read More</a>
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="onDeleteAttachment(attachment)"
+        [attr.aria-label]="'Delete ' + attachment.originalName">
+        <mat-icon>delete</mat-icon>
+      </button>
     </mat-card-actions>
   </mat-card>
   }
 </div>
-
-<mat-paginator
-  [length]="totalPosts()"
-  [pageSize]="pageSize()"
-  [pageSizeOptions]="[6, 12, 24]"
-  (page)="onPageChange($event)"
-  aria-label="Select page">
-</mat-paginator>
-
 } @else {
-<!-- Empty State -->
-<div class="empty-message">
-  <mat-icon>sentiment_dissatisfied</mat-icon>
-  <p>No posts found.</p>
+<div class="status-state">
+  <mat-icon>image_not_supported</mat-icon>
+  <p>No attachments yet.</p>
 </div>
 } } @else {
-<!-- Loading State -->
 <div class="spinner-container">
-  <mat-spinner diameter="50"></mat-spinner>
+  <mat-spinner diameter="40" aria-label="Loading attachments"></mat-spinner>
 </div>
 }

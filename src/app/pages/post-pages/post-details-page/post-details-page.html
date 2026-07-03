@@ -5,14 +5,25 @@
 
 <main class="post-details-page-container" aria-label="Post Details Page">
   <article class="main-content">
-    <button mat-icon-button class="back-button" (click)="goBack()" aria-label="Back to posts">
+    <button
+      mat-icon-button
+      class="back-button"
+      (click)="goBack()"
+      aria-label="Back to posts">
       <mat-icon>arrow_back</mat-icon>
     </button>
     <app-post-description></app-post-description>
   </article>
 
   <aside class="side-content">
-    <app-post-details></app-post-details>
+    <mat-tab-group mat-stretch-tabs="false" animationDuration="200ms">
+      <mat-tab label="Details">
+        <app-post-details></app-post-details>
+      </mat-tab>
+      <mat-tab label="Attachments">
+        <app-post-attachment-grid></app-post-attachment-grid>
+      </mat-tab>
+    </mat-tab-group>
   </aside>
 </main>
 
