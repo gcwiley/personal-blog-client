@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 
-// post service, interface, and pipes
+// post service, interface, pipes
 import { PostService } from '../../services/post.service';
 import { Post } from '../../types/post.interface';
 import { TimeAgoPipe } from '../../pipes/time-ago.pipe';

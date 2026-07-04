@@ -16,7 +16,7 @@ import {
   timer,
 } from 'rxjs';
 
-// environment
+// environment variables
 import { environment } from '../../environments/environment';
 
 // post interfaces

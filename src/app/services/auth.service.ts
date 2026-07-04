@@ -70,6 +70,19 @@ export class AuthService {
       );
   }
 
+  // FORGOT PASSWORD
+  public forgotPassword(email: string): Observable<void> {
+    return this.http.post<void>('/api/auth/forgot-password', { email });
+  }
+
+  // RESET PASSWORD
+  public resetPassword(token: string, password: string): Observable<void> {
+    return this.http.post<void>('/api/auth/reset-password', {
+      token,
+      password,
+    });
+  }
+
   // SIGN OUT USER
   public signOutUser(): void {
     this.removeToken();

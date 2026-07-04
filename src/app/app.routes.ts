@@ -27,7 +27,9 @@ export const routes: Routes = [
     title: 'My Profile',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./pages/user-profile-page/user-profile-page').then((m) => m.UserProfilePage),
+      import('./pages/user-profile-page/user-profile-page').then(
+        (m) => m.UserProfilePage,
+      ),
   },
   // sign in page
   {
@@ -42,6 +44,24 @@ export const routes: Routes = [
     title: 'Create New Account',
     loadComponent: () =>
       import('./pages/signup-page/signup-page').then((m) => m.SignUpPage),
+  },
+  // forgot password page
+  {
+    path: 'forgot-password',
+    title: 'Forgot Password',
+    loadComponent: () =>
+      import('./pages/forgot-password-page/forgot-password-page').then(
+        (m) => m.ForgotPasswordPage,
+      ),
+  },
+  // reset password page (linked from email)
+  {
+    path: 'reset-password',
+    title: 'Reset Password',
+    loadComponent: () =>
+      import('./pages/reset-password-page/reset-password-page').then(
+        (m) => m.ResetPasswordPage,
+      ),
   },
   // grouped post routes
   {
