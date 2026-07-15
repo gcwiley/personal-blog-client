@@ -1,1 +1,108 @@
+@if (posts().length > 0) {
+<section
+  class="carousel"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  aria-label="Post carousel"
+  tabindex="0">
+  <!-- Slide track -->
+  <div class="carousel__track-wrapper" #postCarouselWrapper>
+    <div
+      class="carousel__track"
+      [style.transform]="'translateX(-' + activeIndex * 100 + '%)'">
+      @for (post of posts(); track post.id; let i = $index) {
+      <div class="carousel__slide" [attr.aria-hidden]="i !== activeIndex">
+        <mat-card appearance="outlined" class="carousel__card">
+          <mat-card-header>
+            <mat-card-subtitle class="carousel__meta">
+              <span class="carousel__date">
+                {{ post.publishedDate | date : 'mediumDate' }}
+              </span>
+              <mat-chip-set>
+                <mat-chip>{{ post.category }}</mat-chip>
+              </mat-chip-set>
+            </mat-card-subtitle>
+            <mat-card-title class="carousel__title"
+              >{{ post.title }}</mat-card-title
+            >
+            <mat-card-subtitle class="carousel__author">
+              By {{ post.author }} @if (post.publishedDate) { &bull;
+              <span class="carousel__time-ago"
+                >{{ post.publishedDate | timeAgo }}</span
+              >
+              }
+            </mat-card-subtitle>
+          </mat-card-header>
 
+          <mat-divider />
+
+          <mat-card-content class="carousel__body">
+            <p>{{ post.body }}</p>
+          </mat-card-content>
+
+          <mat-card-actions align="end">
+            <a
+              mat-stroked-button
+              color="primary"
+              [routerLink]="['/posts', post.id]">
+              <mat-icon>open_in_new</mat-icon>
+              Read More
+            </a>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+      }
+    </div>
+  </div>
+
+  <!-- Prev button -->
+  <button
+    mat-icon-button
+    class="carousel__nav carousel__nav--prev"
+    [disabled]="!canPrev"
+    (click)="prev()"
+    matTooltip="Previous"
+    aria-label="Previous post">
+    <mat-icon>chevron_left</mat-icon>
+  </button>
+
+  <!-- Next button -->
+  <button
+    mat-icon-button
+    class="carousel__nav carousel__nav--next"
+    [disabled]="!canNext"
+    (click)="next()"
+    matTooltip="Next"
+    aria-label="Next post">
+    <mat-icon>chevron_right</mat-icon>
+  </button>
+
+  <!-- Dot indicators -->
+  @if (totalSlides() > 1) {
+  <div class="carousel__dots" role="tablist" aria-label="Slide indicators">
+    @for (post of posts(); track post.id; let i = $index) {
+    <button
+      class="carousel__dot"
+      [class.carousel__dot--active]="i === activeIndex"
+      (click)="goTo(i)"
+      role="tab"
+      [attr.aria-selected]="i === activeIndex"
+      [attr.aria-label]="'Go to slide ' + (i + 1)"
+      [title]="'Go to slide ' + (i + 1)">
+      <span class="cdk-visually-hidden">Go to slide {{ i + 1 }}</span>
+    </button>
+    }
+  </div>
+  }
+
+  <!-- Slide counter -->
+  <div class="carousel__counter" aria-live="polite" aria-atomic="true">
+    {{ activeIndex + 1 }} / {{ totalSlides() }}
+  </div>
+</section>
+} @else {
+<div class="carousel__empty">
+  <mat-icon>article</mat-icon>
+  <p>No posts to display.</p>
+</div>
+}

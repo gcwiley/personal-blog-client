@@ -17,7 +17,7 @@ A personal blog web application built with Angular and Angular Material. Feature
 ## Tech Stack
 
 | Layer | Technology |
-|---|---|
+| --- | --- |
 | Framework | Angular 21 |
 | Language | TypeScript 5.9 |
 | UI Components | Angular Material 21 + Angular CDK |

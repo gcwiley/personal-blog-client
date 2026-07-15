@@ -15,12 +15,6 @@ html {
   );
 }
 
-// ✅ required for mat-icon to resolve font correctly
-.material-icons {
-  font-family: 'Material Icons';
-  font-feature-settings: 'liga';
-}
-
 body {
   color-scheme: light;
   background-color: var(--mat-sys-surface);
