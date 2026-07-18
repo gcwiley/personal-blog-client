@@ -12,18 +12,18 @@
       aria-label="Back to posts">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <app-post-description></app-post-description>
-  </article>
-
-  <aside class="side-content">
     <mat-tab-group mat-stretch-tabs="false" animationDuration="200ms">
-      <mat-tab label="Details">
-        <app-post-details></app-post-details>
+      <mat-tab label="Description">
+        <app-post-description></app-post-description>
       </mat-tab>
       <mat-tab label="Attachments">
         <app-post-attachment-grid></app-post-attachment-grid>
       </mat-tab>
     </mat-tab-group>
+  </article>
+
+  <aside class="side-content">
+    <app-post-details></app-post-details>
   </aside>
 </main>
 

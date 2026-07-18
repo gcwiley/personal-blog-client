@@ -32,7 +32,8 @@
       mat-card-image
       [src]="attachment.filePath"
       [alt]="attachment.originalName"
-      class="attachment-image" />
+      class="attachment-image" 
+      title="attachment-image"/>
     <mat-card-content>
       <p class="attachment-name" [matTooltip]="attachment.originalName">
         {{ attachment.originalName }}

@@ -104,13 +104,6 @@ export const routes: Routes = [
       },
     ],
   },
-  // error page
-  {
-    path: 'error',
-    title: 'Error',
-    loadComponent: () =>
-      import('./pages/error-page/error-page').then((m) => m.ErrorPage),
-  },
   // page not found
   {
     path: '**',

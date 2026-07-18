@@ -1,5 +1,4 @@
 export { AboutPage } from './about-page/about-page';
-export { ErrorPage } from './error-page/error-page';
 export { ForgotPasswordPage } from './forgot-password-page/forgot-password-page';
 export { ResetPasswordPage } from './reset-password-page/reset-password-page';
 export { Homepage } from './home-page/home-page';

@@ -4,7 +4,7 @@
 
 <app-hero></app-hero>
 <app-clock></app-clock>
-<app-toolbar></app-toolbar>
+<app-toolbar [(searchQuery)]="searchQuery"></app-toolbar>
 
 <main
   class="home-page-container"
@@ -12,7 +12,7 @@
   aria-label="Homepage Main Content">
   <article class="main-content">
     <h2 class="section-heading">Latest Posts</h2>
-    <app-post-grid></app-post-grid>
+    <app-post-grid [searchQuery]="searchQuery"></app-post-grid>
   </article>
 
   <aside class="side-content">

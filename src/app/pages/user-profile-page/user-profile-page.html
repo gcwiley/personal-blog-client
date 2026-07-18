@@ -16,6 +16,11 @@
     <mat-card-content>
       <mat-list>
         <mat-list-item lines="2">
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>Username</span>
+          <span matListItemLine>{{ username() ?? 'Not available' }}</span>
+        </mat-list-item>
+        <mat-list-item lines="2">
           <mat-icon matListItemIcon>email</mat-icon>
           <span matListItemTitle>Email</span>
           <span matListItemLine>{{ userEmail() ?? 'Not available' }}</span>

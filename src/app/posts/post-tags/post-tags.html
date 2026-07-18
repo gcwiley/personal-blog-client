@@ -1,0 +1,10 @@
+@if (tags.length > 0) {
+<mat-chip-set aria-label="Post tags">
+  @for (tag of tags; track tag) {
+  <mat-chip>
+    <mat-icon matChipAvatar>tag</mat-icon>
+    {{ tag }}
+  </mat-chip>
+  }
+</mat-chip-set>
+}

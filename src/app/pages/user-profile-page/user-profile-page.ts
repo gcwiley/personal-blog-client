@@ -32,6 +32,7 @@ export class UserProfilePage {
   private readonly router = inject(Router);
 
   public readonly userEmail = toSignal(this.authService.userEmail$);
+  public readonly username = toSignal(this.authService.username$);
   public readonly isAuthenticated = toSignal(this.authService.isAuthenticated$);
 
   public signOut(): void {

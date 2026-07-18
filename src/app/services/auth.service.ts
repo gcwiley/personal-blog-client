@@ -8,6 +8,7 @@ import { decodeJwt, isTokenExpired } from '../utils/jwt.utils';
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private readonly TOKEN_KEY = 'my_blog_jwt_token';
+  private readonly USERNAME_KEY = 'my_blog_username';
 
   private readonly authStatus = new BehaviorSubject<boolean>(
     this.hasValidToken(),
@@ -16,16 +17,21 @@ export class AuthService {
   private readonly http = inject(HttpClient);
 
   // BehaviorSubject to hold the current user information
-  private readonly currentUser = new BehaviorSubject<{ email: string } | null>(
-    this.getUserFromToken(),
-  );
+  private readonly currentUser = new BehaviorSubject<{
+    email: string;
+    username: string;
+  } | null>(this.getUserFromToken());
 
-  private getUserFromToken(): { email: string } | null {
+  private getUserFromToken(): { email: string; username: string } | null {
     const token = this.getToken();
     if (!token || isTokenExpired(token)) return null;
     const payload = decodeJwt(token);
     const email = payload?.['email'];
-    return typeof email === 'string' ? { email } : null;
+    const username =
+      payload?.['username'] ?? localStorage.getItem(this.USERNAME_KEY);
+    return typeof email === 'string'
+      ? { email, username: typeof username === 'string' ? username : '' }
+      : null;
   }
 
   // Observable to expose the current user information
@@ -33,19 +39,24 @@ export class AuthService {
     map((user) => user?.email ?? null),
   );
 
+  public readonly username$ = this.currentUser.pipe(
+    map((user) => user?.username ?? null),
+  );
+
   // SIGN IN USER
   public signInUser(
     username: string,
     password: string,
-  ): Observable<{ token: string; user: { email: string } }> {
+  ): Observable<{ token: string; user: { email: string; username: string } }> {
     return this.http
       .post<{
         token: string;
-        user: { email: string };
+        user: { email: string; username: string };
       }>('/api/auth/signin', { username, password })
       .pipe(
         tap((response) => {
           this.setToken(response.token);
+          localStorage.setItem(this.USERNAME_KEY, response.user.username);
           this.authStatus.next(true);
           this.currentUser.next(response.user);
         }),
@@ -57,15 +68,18 @@ export class AuthService {
     username: string,
     email: string,
     password: string,
-  ): Observable<{ token: string }> {
+  ): Observable<{ token: string; user: { email: string; username: string } }> {
     return this.http
       .post<{
         token: string;
+        user: { email: string; username: string };
       }>('/api/auth/register', { username, email, password })
       .pipe(
         tap((response) => {
           this.setToken(response.token);
+          localStorage.setItem(this.USERNAME_KEY, response.user.username);
           this.authStatus.next(true);
+          this.currentUser.next(response.user);
         }),
       );
   }
@@ -86,6 +100,7 @@ export class AuthService {
   // SIGN OUT USER
   public signOutUser(): void {
     this.removeToken();
+    localStorage.removeItem(this.USERNAME_KEY);
     this.authStatus.next(false);
     this.currentUser.next(null);
   }

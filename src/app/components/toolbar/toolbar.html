@@ -10,6 +10,30 @@
     <span class="post-count">{{ count }} posts</span>
     }
 
+    <!-- search -->
+    <mat-form-field
+      class="search-field"
+      appearance="outline"
+      subscriptSizing="dynamic">
+      <mat-icon matPrefix>search</mat-icon>
+      <input
+        matInput
+        type="search"
+        placeholder="Search posts..."
+        [value]="searchQuery()"
+        (input)="onSearch($any($event.target).value)"
+        aria-label="Search posts" />
+      @if (searchQuery()) {
+      <button
+        matSuffix
+        mat-icon-button
+        (click)="clearSearch()"
+        aria-label="Clear search">
+        <mat-icon>close</mat-icon>
+      </button>
+      }
+    </mat-form-field>
+
     <span class="flex-spacer"></span>
 
     <!-- toggle sort -->

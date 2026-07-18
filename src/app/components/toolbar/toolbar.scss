@@ -28,6 +28,18 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
+.search-field {
+  flex: 1 1 auto;
+  max-width: 280px;
+  min-width: 120px;
+
+  // reduce default form-field height to match toolbar buttons
+  .mat-mdc-form-field-infix {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+}
+
 // responsive adjustments
 @media (max-width: 600px) {
   .toolbar-content {
@@ -36,6 +48,10 @@
 
     .flex-spacer {
       display: none;
+    }
+
+    .search-field {
+      max-width: 100%;
     }
 
     mat-button-toggle-group {

@@ -1,17 +1,22 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  model,
+  DestroyRef,
   inject,
+  model,
 } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { catchError, of } from 'rxjs';
-import { toSignal } from '@angular/core/rxjs-interop';
+
+// rxjs 
+import { catchError, debounceTime, of, Subject } from 'rxjs';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 
 // angular material
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SortDirection } from '@angular/material/sort';
@@ -32,7 +37,9 @@ export type PostSortField = 'createdAt' | 'title' | 'date';
     AsyncPipe,
     RouterModule,
     MatButtonModule,
+    MatFormFieldModule,
     MatIconModule,
+    MatInputModule,
     MatButtonToggleModule,
     MatTooltipModule,
   ],
@@ -40,11 +47,23 @@ export type PostSortField = 'createdAt' | 'title' | 'date';
 export class Toolbar {
   private readonly postService = inject(PostService);
   private readonly themeService = inject(ThemeService);
-  public readonly isDark = toSignal(this.themeService.isDark$, { initialValue: false });
+  private readonly destroyRef = inject(DestroyRef);
+  public readonly isDark = toSignal(this.themeService.isDark$, {
+    initialValue: false,
+  });
 
   public viewMode = model<PostViewMode>('grid');
   public sortField = model<PostSortField>('createdAt');
   public sortOrder = model<SortDirection>('desc');
+  public searchQuery = model<string>('');
+
+  private readonly searchInput$ = new Subject<string>();
+
+  constructor() {
+    this.searchInput$
+      .pipe(debounceTime(300), takeUntilDestroyed(this.destroyRef))
+      .subscribe((q) => this.searchQuery.set(q));
+  }
 
   // get post count as a signal, with error handling to return null on failure
   public readonly postCount$ = this.postService.getPostsCount().pipe(
@@ -53,6 +72,14 @@ export class Toolbar {
 
   // toggle theme between light and dark
   public toggleTheme(): void {
-    this.themeService.toggleTheme()
+    this.themeService.toggleTheme();
+  }
+
+  public onSearch(value: string): void {
+    this.searchInput$.next(value);
+  }
+
+  public clearSearch(): void {
+    this.searchQuery.set('');
   }
 }

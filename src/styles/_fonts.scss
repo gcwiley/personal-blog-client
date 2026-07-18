@@ -1,11 +1,10 @@
 // Google Roboto Font Configuration
-
 @font-face {
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 300;
   font-display: swap;
-  src: url('/fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('/fonts/roboto-v30-latin-regular.woff') format('woff');
 }
 
 @font-face {
@@ -13,7 +12,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('/fonts/roboto-v30-latin-regular.woff') format('woff');
 }
 
 @font-face {
@@ -21,7 +20,7 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('/fonts/roboto-v30-latin-regular.woff') format('woff');
 }
 
 // Material Icons

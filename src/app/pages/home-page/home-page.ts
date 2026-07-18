@@ -28,4 +28,6 @@ import { PostGrid, RecentPosts } from '../../posts';
     RecentPosts,
   ],
 })
-export class Homepage {}
+export class Homepage {
+  public searchQuery = '';
+}
