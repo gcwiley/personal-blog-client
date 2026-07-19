@@ -10,9 +10,8 @@
   <mat-card class="post-form-card" appearance="outlined">
     <mat-card-content>
       <div class="form-grid">
-        
         <!-- title -->
-        <mat-form-field  appearance="outline">
+        <mat-form-field class="grid-col-2" appearance="outline">
           <mat-label>Title</mat-label>
           <input
             matInput
@@ -20,13 +19,14 @@
             formControlName="title"
             title="Title"
             aria-describedby="title-error" />
-          @if (postForm.controls['title'].hasError('required')) {
+          @if (postForm.controls['title'].hasError('required') &&
+          (postForm.controls.title.touched || submitted())) {
           <mat-error id="title-error">Please enter a post title.</mat-error>
           }
         </mat-form-field>
 
         <!-- author -->
-        <mat-form-field appearance="outline">
+        <mat-form-field class="grid-col-2" appearance="outline">
           <mat-label>Author</mat-label>
           <input
             matInput
@@ -34,7 +34,8 @@
             formControlName="author"
             placeholder="Author"
             aria-describedby="author-error" />
-          @if (this.postForm.controls['author'].hasError('required')) {
+          @if (this.postForm.controls['author'].hasError('required') &&
+          (postForm.controls.author.touched || submitted())) {
           <mat-error id="author-error">Please enter an author.</mat-error>
           }
         </mat-form-field>
@@ -50,8 +51,11 @@
             >
             }
           </mat-select>
-          @if (this.postForm.controls['category'].hasError('required')) {
-          <mat-error>Please select a post category.</mat-error>
+          @if (this.postForm.controls['category'].hasError('required') &&
+          (postForm.controls.category.touched || submitted())) {
+          <mat-error id="category-error"
+            >Please select a post category.</mat-error
+          >
           }
         </mat-form-field>
 
@@ -67,13 +71,16 @@
             matSuffix
             [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
-          @if (this.postForm.controls['publishedDate'].hasError('required')) {
-          <mat-error>Please select a publication date.</mat-error>
+          @if (this.postForm.controls['publishedDate'].hasError('required') &&
+          (postForm.controls.publishedDate.touched || submitted())) {
+          <mat-error id="date-error"
+            >Please select a publication date.</mat-error
+          >
           }
         </mat-form-field>
 
         <!-- body -->
-        <mat-form-field appearance="outline">
+        <mat-form-field class="grid-col-2" appearance="outline">
           <mat-label>Content</mat-label>
           <textarea
             matInput
@@ -81,7 +88,8 @@
             formControlName="body"
             title="Body"
             aria-describedby="body-error"></textarea>
-          @if (this.postForm.controls['body'].hasError('required')) {
+          @if (this.postForm.controls['body'].hasError('required') &&
+          (postForm.controls.body.touched || submitted())) {
           <mat-error id="body-error"
             >Please provide content for your post.</mat-error
           >
@@ -95,10 +103,7 @@
         Clear
       </button>
       <span class="flex-spacer"></span>
-      <button
-        matButton
-        type="submit"
-        [disabled]="!postForm.valid">
+      <button matButton type="submit" [disabled]="!postForm.valid">
         {{ mode() === 'create' ? 'Create' : 'Update' }}
       </button>
     </mat-card-actions>

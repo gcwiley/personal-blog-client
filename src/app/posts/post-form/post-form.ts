@@ -50,6 +50,10 @@ export class PostForm implements OnInit {
   public isSaving = signal(false);
   public submitted = signal(false);
 
+  public hasUnsavedChanges(): boolean {
+    return this.postForm.dirty;
+  }
+
   private id!: string | null;
 
   readonly categories: SelectOption[] = POST_CATEGORIES;
@@ -77,7 +81,7 @@ export class PostForm implements OnInit {
         first(),
         switchMap((paramMap: ParamMap) => {
           if (paramMap.has('id')) {
-            this.mode.set('edit'); 
+            this.mode.set('edit');
             this.id = paramMap.get('id');
             return this.postService.getPostById(this.id!);
           } else {
@@ -90,7 +94,9 @@ export class PostForm implements OnInit {
         if (post) {
           this.postForm.patchValue({
             ...post,
-            publishedDate: post.publishedDate ? new Date(post.publishedDate) : null,
+            publishedDate: post.publishedDate
+              ? new Date(post.publishedDate)
+              : null,
           });
         }
       });
@@ -117,6 +123,7 @@ export class PostForm implements OnInit {
             this.snackBar.open('Post successfully created.', 'Close', {
               duration: SNACK_BAR_DURATION_MS,
             });
+            this.postForm.markAsPristine();
             this.router.navigateByUrl('/');
           },
           error: () => {

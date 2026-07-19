@@ -11,7 +11,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialog } from '../components/confirm-dialog/confirm-dialog';
 
 export interface CanComponentDeactivate {
-  canDeactivate: () => Observable<boolean> | Promise<boolean> | boolean;
+  canDeactivate?: () => Observable<boolean> | Promise<boolean> | boolean;
   hasUnsavedChanges?: () => boolean;
 }
 

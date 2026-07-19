@@ -2,13 +2,17 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router } from '@angular/router';
 
+// angular material
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 
+// shared components
 import { Navbar, Footer, Clock } from '../../components';
+
+// auth service
 import { AuthService } from '../../services/auth.service';
 
 @Component({

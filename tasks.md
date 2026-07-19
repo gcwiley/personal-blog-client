@@ -6,10 +6,12 @@
 
 * Fix Dark Mode Toggle - A permanent switch in the navbar that saves user preference to localStorage and toggles the light and dark material you've already defined.
 
-* add link to sign in page from sign up page.
+* grand canyon image
 
-* fix styling on post form
+* fix routing with sign out button
 
-* add username on user profile page
+* fix action buttons on post form.
 
-* update node
+* fix all linting issues
+
+* add tags to post details page

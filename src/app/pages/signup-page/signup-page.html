@@ -1,5 +1,5 @@
-<main class="signin-page-container" aria-label="Sign In Page">
-  <mat-card class="signin-form" appearance="raised">
+<main class="signup-page-container" aria-label="Sign Up Page">
+  <mat-card class="signup-form" appearance="raised">
     <div class="title-text">
       <h1>Personal Blog</h1>
       <p>Please register for a new account.</p>
@@ -81,7 +81,7 @@
         <mat-card-actions>
           <button
             matButton="filled"
-            class="sign-in-button"
+            class="sign-up-button"
             type="submit"
             [disabled]="signUpForm.invalid || isLoading()">
             <!-- loading spinner shown during request -->
@@ -92,7 +92,7 @@
         </mat-card-actions>
       </form>
     </mat-card-content>
-    <div class="signin-footer-link">
+    <div class="signup-footer-link">
       <span>Already have an account? </span>
       <a routerLink="/signin">Sign in here.</a>
     </div>
