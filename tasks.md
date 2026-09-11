@@ -19,5 +19,3 @@
 * set up photo gallery
 
 * add tooltips to navbar
-
-* fix gregwiley-dev website

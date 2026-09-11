@@ -21,6 +21,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog } from '@angular/material/dialog';
+
+// dialogs
+import { AttachmentPreviewDialog } from '../attachment-preview-dialog/attachment-preview-dialog';
 
 // services, types, and constants
 import { AttachmentService } from '../../services/attachment.service';
@@ -53,14 +57,17 @@ export class PostAttachmentGrid implements OnInit {
   private readonly attachmentService = inject(AttachmentService);
   private readonly confirmDialogService = inject(CustomConfirmDialogService);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly dialog = inject(MatDialog);
 
   private postId = '';
   private readonly refresh$ = new BehaviorSubject<void>(undefined);
 
+  // Observable that emits the list of attachments for the current post
   public attachments$!: Observable<Attachment[] | null>;
-  public hasError = signal(false);
+  public hasError = signal(false); // Indicates whether there was an error loading attachments
   public isUploading = signal(false);
 
+  // Lifecycle hook that initializes the component
   public ngOnInit(): void {
     this.attachments$ = this.route.paramMap.pipe(
       map((pm) => pm.get('id')),
@@ -83,10 +90,21 @@ export class PostAttachmentGrid implements OnInit {
     );
   }
 
+  // Triggers the file input click event to select a new attachment
   public triggerFileInput(): void {
     this.fileInputRef.nativeElement.click();
   }
 
+  // Opens the attachment preview dialog for the selected attachment
+  public onAttachmentClick(attachment: Attachment): void {
+    this.dialog.open(AttachmentPreviewDialog, {
+      data: attachment,
+      maxWidth: '90vw',
+      maxHeight: '90vh',
+    });
+  }
+
+  // Handles the file selection event and uploads the selected attachment
   public onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -115,6 +133,7 @@ export class PostAttachmentGrid implements OnInit {
       });
   }
 
+  // Handles the deletion of the selected attachment
   public onDeleteAttachment(attachment: Attachment): void {
     this.confirmDialogService
       .openCustomConfirmDialog(CustomConfirmDialog.Delete)
@@ -140,6 +159,7 @@ export class PostAttachmentGrid implements OnInit {
       });
   }
 
+  // Formats the file size from bytes to a human-readable string
   public formatFileSize(bytes: string): string {
     const size = parseInt(bytes, 10);
     if (size < 1024) return `${size} B`;

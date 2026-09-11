@@ -15,8 +15,8 @@
 }
 
 .attachment-grid {
-  display: grid; 
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); 
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 16px; // Adjust the gap between cards as needed
   padding: 4px 0; // Adjust the padding as needed
 }
@@ -30,6 +30,7 @@
     aspect-ratio: 1 / 1;
     object-fit: cover;
     border-radius: 4px 4px 0 0;
+    cursor: pointer;
   }
 
   .attachment-name {

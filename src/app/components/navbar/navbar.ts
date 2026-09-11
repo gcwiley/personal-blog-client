@@ -13,6 +13,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // contact component
 import { Contact } from '../contact/contact';
@@ -37,6 +38,7 @@ import { SNACK_BAR_DURATION_MS } from '../../constants/ui.constants';
     MatButtonModule,
     MatMenuModule,
     MatDividerModule,
+    MatTooltipModule,
   ],
 })
 export class Navbar {

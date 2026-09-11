@@ -8,12 +8,14 @@
       <a mat-list-item [routerLink]="['/posts', post.id]" lines="2">
         <mat-icon matListItemIcon>article</mat-icon>
         <span matListItemTitle>{{ post.title }}</span>
-        <span matListItemLine>Published: {{ post.publishedDate | date : 'mediumDate' }}</span>
+        <span matListItemLine
+          >Published: {{ post.publishedDate | date : 'mediumDate' }}</span
+        >
       </a>
       @if (!last) {
       <mat-divider></mat-divider>
       } } @empty {
-      <mat-list-item lines="2">
+      <mat-list-item lines="2" role="status">
         <span matListItemTitle class="empty-state">No Recent Posts</span>
       </mat-list-item>
       }

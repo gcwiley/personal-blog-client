@@ -12,7 +12,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 // rxjs
 import { filter, switchMap, catchError, finalize, EMPTY } from 'rxjs';
 
-// angular material
+// material components
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 // post service

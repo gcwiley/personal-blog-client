@@ -32,8 +32,13 @@
       mat-card-image
       [src]="attachment.filePath"
       [alt]="attachment.originalName"
-      class="attachment-image" 
-      title="attachment-image"/>
+      title="attachment-image"
+      class="attachment-image"
+      role="button"
+      tabindex="0"
+      [attr.aria-label]="'View ' + attachment.originalName"
+      (click)="onAttachmentClick(attachment)"
+      (keydown.enter)="onAttachmentClick(attachment)" />
     <mat-card-content>
       <p class="attachment-name" [matTooltip]="attachment.originalName">
         {{ attachment.originalName }}

@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{ data.originalName }}</h2>
+
+<mat-dialog-content>
+  <img
+    [src]="data.filePath"
+    [alt]="data.originalName"
+    title="attachment-preview-image"
+    class="preview-image" />
+  <p class="preview-meta">{{ data.createdAt | date: 'medium' }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button matButton (click)="close()">Close</button>
+</mat-dialog-actions>

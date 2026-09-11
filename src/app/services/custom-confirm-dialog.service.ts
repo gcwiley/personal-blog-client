@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 // rxjs
 import { Observable } from 'rxjs';
 
-// angular material
+// material components
 import { MatDialog } from '@angular/material/dialog';
 
 // confirm components

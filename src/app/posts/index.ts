@@ -1,3 +1,4 @@
+export { AttachmentPreviewDialog } from './attachment-preview-dialog/attachment-preview-dialog';
 export { PostAttachmentGrid } from './post-attachment-grid/post-attachment-grid';
 export { PostCarousel } from './post-carousel/post-carousel';
 export { PostCount } from './post-count/post-count';

@@ -22,7 +22,7 @@ import {
   tap,
 } from 'rxjs/operators';
 
-// angular material
+// material components
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

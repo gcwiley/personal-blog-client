@@ -1,10 +1,11 @@
 import { inject } from '@angular/core';
 import { CanDeactivateFn } from '@angular/router';
 
+// fix this! use bookshelf as an example
 // rxjs
 import { Observable, map } from 'rxjs';
 
-// angular material
+// material components
 import { MatDialog } from '@angular/material/dialog';
 
 // confirm dialog

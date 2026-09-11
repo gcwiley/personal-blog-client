@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
-// angular material
+// material components
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';

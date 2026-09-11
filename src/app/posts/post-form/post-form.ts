@@ -14,7 +14,7 @@ import { of, first, switchMap, finalize } from 'rxjs';
 // import quill rich text editor
 import { QuillModule } from 'ngx-quill';
 
-// angular material
+// material components
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
