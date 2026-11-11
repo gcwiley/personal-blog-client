@@ -12,8 +12,6 @@
 
 * hero component css styles
 
-* blue highlights in sign in page
-
 * roboto woff2 file set up
 
 * set up photo gallery

@@ -11,6 +11,7 @@ export const authGuard: CanActivateFn = (_route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
+  // check if the user is authenticated and redirect to sign-in if not
   return authService.isAuthenticated$.pipe(
     take(1),
     map((isAuthenticated) => {
