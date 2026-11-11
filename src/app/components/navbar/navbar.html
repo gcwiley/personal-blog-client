@@ -34,7 +34,7 @@
       </button>
 
       <!-- show admin menu only when authenticated -->
-      @if (isAuthenticated$ | async) {
+      @if (isAuthenticated()) {
       <button
         mat-icon-button
         class="admin-btn"
@@ -47,7 +47,7 @@
 
       <mat-menu #adminMenu="matMenu" xPosition="before" yPosition="below">
         <!-- display user email -->
-        @if (userEmail$ | async; as email) {
+        @if (userEmail(); as email) {
         <div class="email">Signed in as<br /><strong>{{ email }}</strong></div>
         <mat-divider></mat-divider>
         }

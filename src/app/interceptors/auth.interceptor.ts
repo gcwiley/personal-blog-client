@@ -15,19 +15,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  // only add the Authorization header for API requests
+  // only touch API requests — the app session lives in an httpOnly cookie, so
+  // there's no token to read/attach here; we just need to make sure the cookie is
+  // sent (relevant when the API is on a different origin than the app)
   const isApiRequest = req.url.startsWith(environment.apiUrl);
   if (!isApiRequest) {
     return next(req);
   }
 
-  // get the token from the auth service and add it to the request headers if it exists
-  const token = authService.getToken();
-  if (token) {
-    req = req.clone({
-      setHeaders: { Authorization: `Bearer ${token}` },
-    });
-  }
+  req = req.clone({ withCredentials: true });
+
   // handle 401 Unauthorized errors by signing out the user and redirecting to the sign-in page
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {

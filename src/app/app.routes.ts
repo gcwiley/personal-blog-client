@@ -31,37 +31,12 @@ export const routes: Routes = [
         (m) => m.UserProfilePage,
       ),
   },
-  // sign in page
+  // sign in page (Google SSO via OAuth2 Proxy — no password/signup flow)
   {
     path: 'signin',
     title: 'Sign In',
     loadComponent: () =>
       import('./pages/signin-page/signin-page').then((m) => m.SignInPage),
-  },
-  // sign up page
-  {
-    path: 'signup',
-    title: 'Create New Account',
-    loadComponent: () =>
-      import('./pages/signup-page/signup-page').then((m) => m.SignUpPage),
-  },
-  // forgot password page
-  {
-    path: 'forgot-password',
-    title: 'Forgot Password',
-    loadComponent: () =>
-      import('./pages/forgot-password-page/forgot-password-page').then(
-        (m) => m.ForgotPasswordPage,
-      ),
-  },
-  // reset password page (linked from email)
-  {
-    path: 'reset-password',
-    title: 'Reset Password',
-    loadComponent: () =>
-      import('./pages/reset-password-page/reset-password-page').then(
-        (m) => m.ResetPasswordPage,
-      ),
   },
   // grouped post routes
   {

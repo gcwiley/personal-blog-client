@@ -9,22 +9,17 @@ import { provideRouter, Router } from '@angular/router';
 // auth service
 import { AuthService } from '../services/auth.service';
 
-// --- helpers ---
-function makeMockJwt(payload: Record<string, unknown>): string {
-  const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
-  const body = btoa(JSON.stringify(payload));
-  return `${header}.${body}.signature`;
-}
+// environment variables
+import { environment } from '../../environments/environment';
 
-const FUTURE_EXP = Math.floor(Date.now() / 1000) + 3600;
-const PAST_EXP = Math.floor(Date.now() / 1000) - 3600;
+const MOCK_USER = {
+  id: 'user-1',
+  email: 'test@example.com',
+  username: 'testuser',
+};
 
-const MOCK_USER = { email: 'test@example.com', username: 'testuser' };
-const VALID_TOKEN = makeMockJwt({ ...MOCK_USER, exp: FUTURE_EXP });
-const EXPIRED_TOKEN = makeMockJwt({ ...MOCK_USER, exp: PAST_EXP });
-
-const TOKEN_KEY = 'my_blog_jwt_token';
-const USERNAME_KEY = 'my_blog_username';
+const SESSION_URL = `${environment.apiUrl}/auth/session`;
+const SIGNOUT_URL = `${environment.apiUrl}/auth/signout`;
 
 // --- suite ---
 
@@ -33,265 +28,133 @@ describe('AuthService', () => {
   let router: Router;
 
   beforeEach(() => {
-    localStorage.clear();
-
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([]),
+        provideRouter([{ path: 'signin', children: [] }]),
       ],
     });
 
     httpTesting = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
-    // AuthService is injected per-test so localStorage state is read at construction time
   });
 
   afterEach(() => {
     httpTesting.verify();
-    localStorage.clear();
   });
 
   // --- initialization ---
 
   describe('initialization', () => {
-    it('is unauthenticated when no token exists', () => {
+    it('is unauthenticated before any session is established', () => {
       const service = TestBed.inject(AuthService);
-      let isAuth: boolean | undefined;
-      service.isAuthenticated$.subscribe((v) => (isAuth = v));
-      expect(isAuth).toBe(false);
-    });
-
-    it('is unauthenticated when token is expired', () => {
-      localStorage.setItem(TOKEN_KEY, EXPIRED_TOKEN);
-      const service = TestBed.inject(AuthService);
-      let isAuth: boolean | undefined;
-      service.isAuthenticated$.subscribe((v) => (isAuth = v));
-      expect(isAuth).toBe(false);
-    });
-
-    it('is authenticated when a valid token exists', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      const service = TestBed.inject(AuthService);
-      let isAuth: boolean | undefined;
-      service.isAuthenticated$.subscribe((v) => (isAuth = v));
-      expect(isAuth).toBe(true);
-    });
-
-    it('emits null for userEmail$ when no valid token', () => {
-      const service = TestBed.inject(AuthService);
-      let email: string | null | undefined;
-      service.userEmail$.subscribe((v) => (email = v));
-      expect(email).toBeNull();
-    });
-
-    it('emits email from token on userEmail$', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      const service = TestBed.inject(AuthService);
-      let email: string | null | undefined;
-      service.userEmail$.subscribe((v) => (email = v));
-      expect(email).toBe(MOCK_USER.email);
-    });
-
-    it('emits username from token on username$', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      const service = TestBed.inject(AuthService);
-      let username: string | null | undefined;
-      service.username$.subscribe((v) => (username = v));
-      expect(username).toBe(MOCK_USER.username);
+      expect(service.isAuthenticated()).toBe(false);
+      expect(service.userEmail()).toBeNull();
+      expect(service.username()).toBeNull();
     });
   });
 
-  // --- getToken ---
+  // --- exchangeGoogleSession ---
 
-  describe('getToken()', () => {
-    it('returns null when no token is stored', () => {
+  describe('exchangeGoogleSession()', () => {
+    it('POSTs to /auth/session with credentials included (so the httpOnly session cookie is sent/received)', () => {
       const service = TestBed.inject(AuthService);
-      expect(service.getToken()).toBeNull();
-    });
+      service.exchangeGoogleSession().subscribe();
 
-    it('returns the stored token', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      const service = TestBed.inject(AuthService);
-      expect(service.getToken()).toBe(VALID_TOKEN);
-    });
-  });
-
-  // --- signInUser ---
-
-  describe('signInUser()', () => {
-    it('POSTs to /api/auth/signin with credentials', () => {
-      const service = TestBed.inject(AuthService);
-      service.signInUser('testuser', 'password').subscribe();
-
-      const req = httpTesting.expectOne('/api/auth/signin');
+      const req = httpTesting.expectOne(SESSION_URL);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({
-        username: 'testuser',
-        password: 'password',
+      expect(req.request.withCredentials).toBe(true);
+      req.flush({
+        success: true,
+        message: 'Session established.',
+        user: MOCK_USER,
       });
-      req.flush({ token: VALID_TOKEN, user: MOCK_USER });
     });
 
-    it('stores the token in localStorage on success', () => {
+    it('never reads or stores a JWT client-side — only user info is tracked', () => {
       const service = TestBed.inject(AuthService);
-      service.signInUser('testuser', 'password').subscribe();
+      service.exchangeGoogleSession().subscribe();
 
-      httpTesting
-        .expectOne('/api/auth/signin')
-        .flush({ token: VALID_TOKEN, user: MOCK_USER });
-      expect(localStorage.getItem(TOKEN_KEY)).toBe(VALID_TOKEN);
-    });
-
-    it('stores the username in localStorage on success', () => {
-      const service = TestBed.inject(AuthService);
-      service.signInUser('testuser', 'password').subscribe();
-
-      httpTesting
-        .expectOne('/api/auth/signin')
-        .flush({ token: VALID_TOKEN, user: MOCK_USER });
-      expect(localStorage.getItem(USERNAME_KEY)).toBe(MOCK_USER.username);
-    });
-
-    it('emits true on isAuthenticated$ after sign in', () => {
-      const service = TestBed.inject(AuthService);
-      let isAuth: boolean | undefined;
-      service.isAuthenticated$.subscribe((v) => (isAuth = v));
-
-      service.signInUser('testuser', 'password').subscribe();
-      httpTesting
-        .expectOne('/api/auth/signin')
-        .flush({ token: VALID_TOKEN, user: MOCK_USER });
-
-      expect(isAuth).toBe(true);
-    });
-
-    it('emits the user email on userEmail$ after sign in', () => {
-      const service = TestBed.inject(AuthService);
-      let email: string | null | undefined;
-      service.userEmail$.subscribe((v) => (email = v));
-
-      service.signInUser('testuser', 'password').subscribe();
-      httpTesting
-        .expectOne('/api/auth/signin')
-        .flush({ token: VALID_TOKEN, user: MOCK_USER });
-
-      expect(email).toBe(MOCK_USER.email);
-    });
-  });
-
-  // --- registerNewUser ---
-
-  describe('registerNewUser()', () => {
-    it('POSTs to /api/auth/register with credentials', () => {
-      const service = TestBed.inject(AuthService);
-      service
-        .registerNewUser('testuser', 'test@example.com', 'password')
-        .subscribe();
-
-      const req = httpTesting.expectOne('/api/auth/register');
-      expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({
-        username: 'testuser',
-        email: 'test@example.com',
-        password: 'password',
+      httpTesting.expectOne(SESSION_URL).flush({
+        success: true,
+        message: 'Session established.',
+        user: MOCK_USER,
       });
-      req.flush({ token: VALID_TOKEN, user: MOCK_USER });
+
+      expect(service.user()).toEqual(MOCK_USER);
     });
 
-    it('stores token and emits authenticated state on success', () => {
+    it('sets isAuthenticated() to true after a successful exchange', () => {
       const service = TestBed.inject(AuthService);
-      let isAuth: boolean | undefined;
-      service.isAuthenticated$.subscribe((v) => (isAuth = v));
+      service.exchangeGoogleSession().subscribe();
 
-      service
-        .registerNewUser('testuser', 'test@example.com', 'password')
-        .subscribe();
-      httpTesting
-        .expectOne('/api/auth/register')
-        .flush({ token: VALID_TOKEN, user: MOCK_USER });
-
-      expect(localStorage.getItem(TOKEN_KEY)).toBe(VALID_TOKEN);
-      expect(isAuth).toBe(true);
-    });
-  });
-
-  // --- forgotPassword ---
-
-  describe('forgotPassword()', () => {
-    it('POSTs to /api/auth/forgot-password with email', () => {
-      const service = TestBed.inject(AuthService);
-      service.forgotPassword('test@example.com').subscribe();
-
-      const req = httpTesting.expectOne('/api/auth/forgot-password');
-      expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({ email: 'test@example.com' });
-      req.flush(null);
-    });
-  });
-
-  // --- resetPassword ---
-
-  describe('resetPassword()', () => {
-    it('POSTs to /api/auth/reset-password with token and new password', () => {
-      const service = TestBed.inject(AuthService);
-      service.resetPassword('reset-token-abc', 'newpassword').subscribe();
-
-      const req = httpTesting.expectOne('/api/auth/reset-password');
-      expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual({
-        token: 'reset-token-abc',
-        password: 'newpassword',
+      httpTesting.expectOne(SESSION_URL).flush({
+        success: true,
+        message: 'Session established.',
+        user: MOCK_USER,
       });
-      req.flush(null);
+
+      expect(service.isAuthenticated()).toBe(true);
+      expect(service.userEmail()).toBe(MOCK_USER.email);
+      expect(service.username()).toBe(MOCK_USER.username);
+    });
+
+    it('propagates an error and leaves the session unauthenticated when the proxy session is missing', () => {
+      const service = TestBed.inject(AuthService);
+      let error: unknown;
+      service.exchangeGoogleSession().subscribe({
+        error: (e) => (error = e),
+      });
+
+      httpTesting
+        .expectOne(SESSION_URL)
+        .flush(
+          { success: false, message: 'No authenticated session found.' },
+          { status: 401, statusText: 'Unauthorized' },
+        );
+
+      expect(error).toBeDefined();
+      expect(service.isAuthenticated()).toBe(false);
     });
   });
 
   // --- signOutUser ---
 
   describe('signOutUser()', () => {
-    it('removes the token from localStorage', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
+    it('POSTs to /auth/signout with credentials included', () => {
       const service = TestBed.inject(AuthService);
       service.signOutUser();
-      expect(localStorage.getItem(TOKEN_KEY)).toBeNull();
+
+      const req = httpTesting.expectOne(SIGNOUT_URL);
+      expect(req.request.method).toBe('POST');
+      expect(req.request.withCredentials).toBe(true);
+      req.flush({ success: true, message: 'Signed out successfully.' });
     });
 
-    it('removes the username from localStorage', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      localStorage.setItem(USERNAME_KEY, MOCK_USER.username);
-      const service = TestBed.inject(AuthService);
-      service.signOutUser();
-      expect(localStorage.getItem(USERNAME_KEY)).toBeNull();
-    });
-
-    it('emits false on isAuthenticated$', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      const service = TestBed.inject(AuthService);
-      let isAuth: boolean | undefined;
-      service.isAuthenticated$.subscribe((v) => (isAuth = v));
-
-      service.signOutUser();
-      expect(isAuth).toBe(false);
-    });
-
-    it('emits null on userEmail$', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
-      const service = TestBed.inject(AuthService);
-      let email: string | null | undefined;
-      service.userEmail$.subscribe((v) => (email = v));
-
-      service.signOutUser();
-      expect(email).toBeNull();
-    });
-
-    it('navigates to /signin', () => {
-      localStorage.setItem(TOKEN_KEY, VALID_TOKEN);
+    it('clears the session and navigates to /signin on success', () => {
       const service = TestBed.inject(AuthService);
       const navigateSpy = vi.spyOn(router, 'navigate');
 
       service.signOutUser();
+      httpTesting
+        .expectOne(SIGNOUT_URL)
+        .flush({ success: true, message: 'Signed out successfully.' });
+
+      expect(service.isAuthenticated()).toBe(false);
+      expect(navigateSpy).toHaveBeenCalledWith(['/signin']);
+    });
+
+    it('still clears the local session and navigates even if the request fails', () => {
+      const service = TestBed.inject(AuthService);
+      const navigateSpy = vi.spyOn(router, 'navigate');
+
+      service.signOutUser();
+      httpTesting
+        .expectOne(SIGNOUT_URL)
+        .flush(null, { status: 500, statusText: 'Server Error' });
+
+      expect(service.isAuthenticated()).toBe(false);
       expect(navigateSpy).toHaveBeenCalledWith(['/signin']);
     });
   });

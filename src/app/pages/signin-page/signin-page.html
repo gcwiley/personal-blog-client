@@ -2,83 +2,26 @@
   <mat-card class="signin-form" appearance="raised">
     <div class="title-text">
       <h1>Personal Blog</h1>
-      <p>Please sign in.</p>
+      <p>Please sign in to continue.</p>
     </div>
+
     <mat-card-content>
-      <form [formGroup]="signinForm" (ngSubmit)="onSubmitSignIn()">
-        <!-- username -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Username</mat-label>
-          <input
-            matInput
-            type="text"
-            formControlName="username"
-            placeholder="Enter your username"
-            autocomplete="username" />
-          <!-- use signinForm.get() for type safety -->
-          @if (signinForm.get('username')?.hasError('required') &&
-          signinForm.get('username')?.touched) {
-          <mat-error aria-live="polite">Please enter your username.</mat-error>
-          }
-        </mat-form-field>
-
-        <!-- password -->
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Password</mat-label>
-          <input
-            matInput
-            [type]="showPassword() ? 'text' : 'password'"
-            formControlName="password"
-            placeholder="Enter your password"
-            autocomplete="current-password" />
-          <button
-            mat-icon-button
-            matSuffix
-            type="button"
-            (click)="toggleShowPassword()"
-            [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
-            <mat-icon>
-              {{ showPassword() ? 'visibility_off' : 'visibility' }}
-            </mat-icon>
-          </button>
-          <!-- consistent use of signinForm.get() + touched guard -->
-          @if (signinForm.get('password')?.hasError('required') &&
-          signinForm.get('password')?.touched) {
-          <mat-error aria-live="polite">Please enter your password.</mat-error>
-          } @if (signinForm.get('password')?.hasError('minlength') &&
-          signinForm.get('password')?.touched) {
-          <mat-error aria-live="polite"
-            >Password must be at least 6 characters.</mat-error
-          >
-          }
-        </mat-form-field>
-
-        <!-- forgot password -->
-        <div class="forgot-password">
-          <a routerLink="/forgot-password">Forgot Password?</a>
-        </div>
-
-        <!-- sign in form actions -->
-        <mat-card-actions>
-          <button
-            matButton="filled"
-            class="sign-in-button"
-            type="submit"
-            [disabled]="signinForm.invalid || isLoading()">
-            <!-- loading spinner shown during request -->
-            @if (isLoading()) {
-            <mat-spinner diameter="20"></mat-spinner>
-            } @else { Sign In }
-          </button>
-        </mat-card-actions>
-      </form>
+      @if (isLoading()) {
+      <div class="loading-state">
+        <mat-spinner diameter="32"></mat-spinner>
+        <p>Checking your session&hellip;</p>
+      </div>
+      } @else {
+      <button
+        matButton="filled"
+        class="google-signin-button"
+        type="button"
+        (click)="onSignInWithGoogle()">
+        <mat-icon>login</mat-icon>
+        Sign in with Google
+      </button>
+      }
     </mat-card-content>
-
-    <!-- new account link -->
-    <div class="signin-footer-link">
-      <span>Don't have an account? </span>
-      <a routerLink="/signup">Create one here.</a>
-    </div>
 
     <mat-card-footer class="signin-footer">
       <small>&copy; {{ year }} Gregory Wiley. All rights reserved.</small>

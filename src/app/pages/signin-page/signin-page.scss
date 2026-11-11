@@ -25,11 +25,20 @@
   margin: 0.4rem 0;
 }
 
-.sign-in-button {
+.google-signin-button {
   width: 100%;
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  gap: 0.5rem;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0;
 }
 
 .title-text {
@@ -51,19 +60,6 @@
   margin: 0;
 }
 
-.forgot-password {
-  font: var(--mat-sys-label-large);
-  color: var(--mat-sys-primary);
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.forgot-password a {
-  text-decoration: none;
-  color: inherit;
-  font-weight: 600;
-}
-
 .signin-footer {
   font: var(--mat-sys-label-small);
   margin-top: 12px;
@@ -76,22 +72,6 @@
   font-size: 0.85rem;
   display: inline-block;
   margin-top: 6px;
-}
-
-.signin-footer-link {
-  font: var(--mat-sys-body-medium);
-  text-align: center;
-  margin: 0.5rem 0 1rem;
-
-  a {
-    color: var(--mat-sys-primary);
-    font-weight: 600;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
 }
 
 // reduces padding on smaller screens for better mobile usability

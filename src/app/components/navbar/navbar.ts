@@ -2,9 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-// rxjs
-import { Observable } from 'rxjs';
-
 // material components
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -48,12 +45,8 @@ export class Navbar {
   private readonly dialog = inject(MatDialog);
   public readonly isDark$ = this.themeService.isDark$;
 
-  public readonly isAuthenticated$: Observable<boolean> =
-    this.authService.isAuthenticated$;
-
-  // declared to match navbar.html usage
-  public readonly userEmail$: Observable<string | null> =
-    this.authService.userEmail$;
+  public readonly isAuthenticated = this.authService.isAuthenticated;
+  public readonly userEmail = this.authService.userEmail;
 
   // open user feedback dialog
   public openFeedbackDialog(): void {

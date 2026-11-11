@@ -1,6 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 
 // material components
 import { MatCardModule } from '@angular/material/card';
@@ -33,16 +31,15 @@ import { AuthService } from '../../services/auth.service';
 })
 export class UserProfilePage {
   private readonly authService = inject(AuthService);
-  private readonly router = inject(Router);
 
-  // signals for user information and authentication status
-  public readonly userEmail = toSignal(this.authService.userEmail$);
-  public readonly username = toSignal(this.authService.username$);
-  public readonly isAuthenticated = toSignal(this.authService.isAuthenticated$);
+  // auth service already exposes these as signals
+  public readonly userEmail = this.authService.userEmail;
+  public readonly username = this.authService.username;
+  public readonly isAuthenticated = this.authService.isAuthenticated;
 
-  // sign out the currently authenticated user
+  // sign out the currently authenticated user — AuthService handles navigation
+  // back to /signin once the server-side session cookie has been cleared
   public signOut(): void {
     this.authService.signOutUser();
-    this.router.navigateByUrl('/signin');
   }
 }
